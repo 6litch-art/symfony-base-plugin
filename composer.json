@@ -20,7 +20,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Base\\Composer\\Plugin": "src"
+      "Base\\Composer\\Plugin\\": "src"
     }
   },
   "config": {
