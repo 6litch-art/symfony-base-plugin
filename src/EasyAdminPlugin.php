@@ -68,7 +68,7 @@ final class EasyAdminPlugin implements PluginInterface, EventSubscriberInterface
             );
         }
 
-        $this->io->write('Updated all EasyAdmin PHP files to make classes non-final');
+        $this->io->write('    Updated all EasyAdmin PHP files to make classes non-final');
     }
 
     public function changePrivateToProtectedPropertiesAllEasyAdminClasses()
@@ -78,12 +78,12 @@ final class EasyAdminPlugin implements PluginInterface, EventSubscriberInterface
         foreach ($this->getFilePathsOfAllEasyAdminClasses($easyAdminDirPath) as $filePath) {
             file_put_contents(
                 $filePath,
-                str_replace('final class ', 'class ', file_get_contents($filePath)),
+                str_replace('private ', 'protected ', file_get_contents($filePath)),
                 flags: \LOCK_EX
             );
         }
 
-        $this->io->write('Updated all EasyAdmin PHP files to turn private properties into protected properties');
+        $this->io->write('    Updated all EasyAdmin PHP files to turn private properties into protected properties');
     }
 
     private function isComposerWorkingOn(string $packageName, PackageEvent $event): bool
