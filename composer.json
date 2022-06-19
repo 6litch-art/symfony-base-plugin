@@ -26,7 +26,8 @@
   "config": {
     "platform": { "php": "8.0" },
     "preferred-install": { "*": "dist" },
-    "sort-packages": true
+    "sort-packages": true,
+    "allow-plugins": {"xkzl/base-plugin": true}
   },
   "extra": {
     "class": "Base\\Composer\\Plugin\\EasyAdminPlugin"
