@@ -42,6 +42,7 @@ final class EasyAdminPlugin implements PluginInterface, EventSubscriberInterface
         $this->removeFinalFromAllEasyAdminClasses();
         $this->removeSelfFromAllEasyAdminClasses();
         $this->changePrivateToProtectedPropertiesFromAllEasyAdminClasses();
+        $this->changeNewSelfToNewStaticFromAllEasyAdminClasses();
     }
 
     public function onPackageUpdate(PackageEvent $event)
@@ -52,6 +53,7 @@ final class EasyAdminPlugin implements PluginInterface, EventSubscriberInterface
         $this->removeFinalFromAllEasyAdminClasses();
         $this->removeSelfFromAllEasyAdminClasses();
         $this->changePrivateToProtectedPropertiesFromAllEasyAdminClasses();
+        $this->changeNewSelfToNewStaticFromAllEasyAdminClasses();
     }
 
     public function removeFinalFromAllEasyAdminClasses()
@@ -82,6 +84,21 @@ final class EasyAdminPlugin implements PluginInterface, EventSubscriberInterface
         }
 
         $this->io->write('    '.self::$pluginName.' Updated all EasyAdmin PHP files to remove all self constraint after class methods');
+    }
+
+    public function changeNewSelfToNewStaticFromAllEasyAdminClasses()
+    {
+        $vendorDirPath = $this->getVendorDirPath();
+        $easyAdminDirPath = $vendorDirPath.'/easycorp/easyadmin-bundle';
+        foreach ($this->getFilePathsOfAllEasyAdminClasses($easyAdminDirPath) as $filePath) {
+            file_put_contents(
+                $filePath,
+                str_replace('new self', 'new static', file_get_contents($filePath)),
+                flags: \LOCK_EX
+            );
+        }
+
+        $this->io->write('    '.self::$pluginName.' Updated all EasyAdmin PHP files to change all self declaration to static declaration');
     }
 
     public function changePrivateToProtectedPropertiesFromAllEasyAdminClasses()
