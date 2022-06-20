@@ -30,13 +30,8 @@ final class EasyAdminPlugin implements PluginInterface, EventSubscriberInterface
         ];
     }
 
-    public function deactivate(Composer $composer, IOInterface $io)
-    {
-    }
-
-    public function uninstall(Composer $composer, IOInterface $io)
-    {
-    }
+    public function deactivate(Composer $composer, IOInterface $io) {}
+    public function uninstall(Composer $composer, IOInterface $io) {}
 
     public function onPackageInstall(PackageEvent $event)
     {
@@ -80,7 +75,7 @@ final class EasyAdminPlugin implements PluginInterface, EventSubscriberInterface
         foreach ($this->getFilePathsOfAllEasyAdminClasses($easyAdminDirPath) as $filePath) {
             file_put_contents(
                 $filePath,
-                str_replace([': self', ':self'], '', file_get_contents($filePath)),
+                str_replace(['): self', '):self'], '', file_get_contents($filePath)),
                 flags: \LOCK_EX
             );
         }
