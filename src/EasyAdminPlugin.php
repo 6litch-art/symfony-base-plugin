@@ -30,6 +30,7 @@ final class EasyAdminPlugin implements PluginInterface, EventSubscriberInterface
         ];
     }
 
+    static $pluginName = "\033[0;31m@EasyAdminPlugin:\033[0m";
     public function deactivate(Composer $composer, IOInterface $io) {}
     public function uninstall(Composer $composer, IOInterface $io) {}
 
@@ -65,7 +66,7 @@ final class EasyAdminPlugin implements PluginInterface, EventSubscriberInterface
             );
         }
 
-        $this->io->write('    Updated all EasyAdmin PHP files to make classes non-final');
+        $this->io->write('    '.self::$pluginName.' Updated all EasyAdmin PHP files to make classes non-final');
     }
 
     public function removeSelfFromAllEasyAdminClasses()
@@ -80,7 +81,7 @@ final class EasyAdminPlugin implements PluginInterface, EventSubscriberInterface
             );
         }
 
-        $this->io->write('    Updated all EasyAdmin PHP files to remove all self constraint after class methods');
+        $this->io->write('    '.self::$pluginName.' Updated all EasyAdmin PHP files to remove all self constraint after class methods');
     }
 
     public function changePrivateToProtectedPropertiesFromAllEasyAdminClasses()
@@ -95,7 +96,7 @@ final class EasyAdminPlugin implements PluginInterface, EventSubscriberInterface
             );
         }
 
-        $this->io->write('    Updated all EasyAdmin PHP files to turn private properties into protected properties');
+        $this->io->write('    '.self::$pluginName.' Updated all EasyAdmin PHP files to turn private properties into protected properties');
     }
 
     private function isComposerWorkingOn(string $packageName, PackageEvent $event): bool
