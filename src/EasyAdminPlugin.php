@@ -75,7 +75,7 @@ final class EasyAdminPlugin implements PluginInterface, EventSubscriberInterface
         foreach ($this->getFilePathsOfAllEasyAdminClasses($easyAdminDirPath) as $filePath) {
             file_put_contents(
                 $filePath,
-                str_replace(['): self', '):self', ') :self'], '', file_get_contents($filePath)),
+                str_replace(['): self', '):self', ') :self'], ')', file_get_contents($filePath)),
                 flags: \LOCK_EX
             );
         }
