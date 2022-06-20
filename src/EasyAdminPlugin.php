@@ -30,7 +30,7 @@ final class EasyAdminPlugin implements PluginInterface, EventSubscriberInterface
         ];
     }
 
-    static $pluginName = "\033[0;35m@EasyAdminPlugin \033[0m";
+    static $pluginName = "\033[0;35m@EasyAdminPlugin\033[0m";
     public function deactivate(Composer $composer, IOInterface $io) {}
     public function uninstall(Composer $composer, IOInterface $io) {}
 
