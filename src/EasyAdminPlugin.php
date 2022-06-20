@@ -44,7 +44,8 @@ final class EasyAdminPlugin implements PluginInterface, EventSubscriberInterface
             return;
 
         $this->removeFinalFromAllEasyAdminClasses();
-        $this->changePrivateToProtectedPropertiesAllEasyAdminClasses();
+        $this->removeSelfFromAllEasyAdminClasses();
+        $this->changePrivateToProtectedPropertiesFromAllEasyAdminClasses();
     }
 
     public function onPackageUpdate(PackageEvent $event)
@@ -53,7 +54,8 @@ final class EasyAdminPlugin implements PluginInterface, EventSubscriberInterface
             return;
 
         $this->removeFinalFromAllEasyAdminClasses();
-        $this->changePrivateToProtectedPropertiesAllEasyAdminClasses();
+        $this->removeSelfFromAllEasyAdminClasses();
+        $this->changePrivateToProtectedPropertiesFromAllEasyAdminClasses();
     }
 
     public function removeFinalFromAllEasyAdminClasses()
@@ -71,7 +73,22 @@ final class EasyAdminPlugin implements PluginInterface, EventSubscriberInterface
         $this->io->write('    Updated all EasyAdmin PHP files to make classes non-final');
     }
 
-    public function changePrivateToProtectedPropertiesAllEasyAdminClasses()
+    public function removeSelfFromAllEasyAdminClasses()
+    {
+        $vendorDirPath = $this->getVendorDirPath();
+        $easyAdminDirPath = $vendorDirPath.'/easycorp/easyadmin-bundle';
+        foreach ($this->getFilePathsOfAllEasyAdminClasses($easyAdminDirPath) as $filePath) {
+            file_put_contents(
+                $filePath,
+                str_replace([': self', ':self'], '', file_get_contents($filePath)),
+                flags: \LOCK_EX
+            );
+        }
+
+        $this->io->write('    Updated all EasyAdmin PHP files to make classes non-final');
+    }
+
+    public function changePrivateToProtectedPropertiesFromAllEasyAdminClasses()
     {
         $vendorDirPath = $this->getVendorDirPath();
         $easyAdminDirPath = $vendorDirPath.'/easycorp/easyadmin-bundle';
