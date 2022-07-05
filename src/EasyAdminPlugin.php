@@ -36,8 +36,8 @@ final class EasyAdminPlugin implements PluginInterface, EventSubscriberInterface
 
     public function onPackageInstall(PackageEvent $event)
     {
-        dump($this->isComposerWorkingOn('easycorp/easyadmin-bundle', $event));
-        dump($this->isComposerWorkingOn('xkzl/base-plugin', $event));
+        echo ($this->isComposerWorkingOn('easycorp/easyadmin-bundle', $event));
+        echo ($this->isComposerWorkingOn('xkzl/base-plugin', $event));
 
         if (!$this->isComposerWorkingOn('easycorp/easyadmin-bundle', $event) && !$this->isComposerWorkingOn('xkzl/base-plugin', $event))
             return;
@@ -50,8 +50,8 @@ final class EasyAdminPlugin implements PluginInterface, EventSubscriberInterface
 
     public function onPackageUpdate(PackageEvent $event)
     {
-        dump($this->isComposerWorkingOn('easycorp/easyadmin-bundle', $event));
-        dump($this->isComposerWorkingOn('xkzl/base-plugin', $event));
+        echo ($this->isComposerWorkingOn('easycorp/easyadmin-bundle', $event));
+        echo ($this->isComposerWorkingOn('xkzl/base-plugin', $event));
 
         if (!$this->isComposerWorkingOn('easycorp/easyadmin-bundle', $event) && !$this->isComposerWorkingOn('xkzl/base-plugin', $event))
             return;
