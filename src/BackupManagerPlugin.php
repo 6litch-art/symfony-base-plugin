@@ -28,7 +28,7 @@ final class BackupManagerPlugin implements PluginInterface, EventSubscriberInter
         ];
     }
 
-    static $pluginName = "\033[0;35m* ".__PACKAGE_NAME__."@BasePlugin\033[0m";
+    static $pluginName = "\033[0;35m* ".self::__PACKAGE_NAME__."@BasePlugin\033[0m";
     public function activate  (Composer $composer, IOInterface $io) { $this->io = $io; }
     public function deactivate(Composer $composer, IOInterface $io) {}
     public function uninstall (Composer $composer, IOInterface $io) {}
