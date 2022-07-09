@@ -13,12 +13,12 @@ use Composer\IO\IOInterface;
 use Composer\Package\PackageInterface;
 use Composer\Plugin\PluginInterface;
 
-final class EasyAdminPlugin implements PluginInterface, EventSubscriberInterface
+final class BackupManagerPlugin implements PluginInterface, EventSubscriberInterface
 {
     private IOInterface $io;
 
-    public const __PACKAGE_NAME__ = "EasyAdmin";
-    protected $packagist = 'easycorp/easyadmin-bundle';
+    public const __PACKAGE_NAME__   = "TimeMachine";
+    protected $packagist = 'backup-manager/backup-manager';
 
     public static function getSubscribedEvents()
     {
@@ -55,62 +55,17 @@ final class EasyAdminPlugin implements PluginInterface, EventSubscriberInterface
         $this->changeNewSelfToNewStaticFromAllClasses();
     }
 
-    public function removeFinalFromAllClasses()
+    public function changePrivateToProtectedPropertiesFromClasses()
     {
         $vendorDirPath = $this->getVendorDirPath();
         $bundleDirPath = $vendorDirPath.'/'.$this->packagist;
-        foreach ($this->getFilePathsOfAllClasses($bundleDirPath) as $filePath) {
-            file_put_contents(
-                $filePath,
-                str_replace('final class ', 'class ', file_get_contents($filePath)),
-                flags: \LOCK_EX
-            );
-        }
 
-        $this->io->write('    '.self::$pluginName.' Updated all PHP files to make classes non-final');
-    }
-
-    public function removeSelfFromAllClasses()
-    {
-        $vendorDirPath = $this->getVendorDirPath();
-        $bundleDirPath = $vendorDirPath.'/'.$this->packagist;
-        foreach ($this->getFilePathsOfAllClasses($bundleDirPath) as $filePath) {
-            file_put_contents(
-                $filePath,
-                str_replace(['): self', '):self', ') :self'], ')', file_get_contents($filePath)),
-                flags: \LOCK_EX
-            );
-        }
-
-        $this->io->write('    '.self::$pluginName.' Updated all PHP files to remove all self constraint after class methods');
-    }
-
-    public function changeNewSelfToNewStaticFromAllClasses()
-    {
-        $vendorDirPath = $this->getVendorDirPath();
-        $bundleDirPath = $vendorDirPath.'/'.$this->packagist;
-        foreach ($this->getFilePathsOfAllClasses($bundleDirPath) as $filePath) {
-            file_put_contents(
-                $filePath,
-                str_replace('new self', 'new static', file_get_contents($filePath)),
-                flags: \LOCK_EX
-            );
-        }
-
-        $this->io->write('    '.self::$pluginName.' Updated all PHP files to change all self declaration to static declaration');
-    }
-
-    public function changePrivateToProtectedPropertiesFromAllClasses()
-    {
-        $vendorDirPath = $this->getVendorDirPath();
-        $bundleDirPath = $vendorDirPath.'/'.$this->packagist;
-        foreach ($this->getFilePathsOfAllClasses($bundleDirPath) as $filePath) {
-            file_put_contents(
-                $filePath,
-                str_replace('private ', 'protected ', file_get_contents($filePath)),
-                flags: \LOCK_EX
-            );
-        }
+        $filePath = $bundleDirPath."/src/Manager.php";
+        file_put_contents(
+            $filePath,
+            str_replace('private $', 'protected $', file_get_contents($filePath)),
+            flags: \LOCK_EX
+        );
 
         $this->io->write('    '.self::$pluginName.' Updated all PHP files to turn private properties into protected properties');
     }
@@ -143,7 +98,7 @@ final class EasyAdminPlugin implements PluginInterface, EventSubscriberInterface
     }
 
     /**
-     * @return iterable Returns the file paths of all PHP files that contain classes
+     * @return iterable Returns the file paths of all PHP files that contain EasyAdmin classes
      */
     private function getFilePathsOfAllClasses(string $bundleDirPath): iterable
     {
