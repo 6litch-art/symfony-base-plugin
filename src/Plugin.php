@@ -14,7 +14,7 @@ use Symfony\Component\Finder\Finder;
 
 use UnexpectedValueException;
 
-include_once(getcwd()."/../bootstrap.php");
+include_once(dirname(__FILE__)."/../bootstrap.php");
 
 final class Plugin implements PluginInterface, EventSubscriberInterface
 {
