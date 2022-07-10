@@ -64,7 +64,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
             catch (\Error $e) { continue; }
 
 
-            dump($className);
+            dump($className, $class->getPackageName(), $this->getInstalledPackages($event));
             if(in_array($class->getPackageName(), $this->getInstalledPackages($event)))
                 $class->onPackageInstall($event);
         }
@@ -91,7 +91,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
             try { $class = new $className(); }
             catch (\Error $e) { continue; }
 
-            dump($className);
+            dump($className, $class->getPackageName(), $this->getUpdatedPackages($event));
             if(in_array($class->getPackageName(), $this->getUpdatedPackages($event)))
                 $class->onPackageUpdate($event);
         }
