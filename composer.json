@@ -14,7 +14,9 @@
   "require": {
     "php": ">=8.0",
     "composer-plugin-api": "^2.0",
-    "easycorp/easyadmin-bundle": "*"
+    "easycorp/easyadmin-bundle": "*",
+    "backup-manager/backup-manager": "*",
+    "league/flysystem-bundle": "*"
   },
   "require-dev": {
     "composer/composer": "^2.0"
