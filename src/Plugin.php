@@ -38,7 +38,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
         if(array_key_exists("name", $composerJson))
             return $composerJson['name'];
 
-        throw new UnexpectedValueException("No plugin name found in ".__CLASS__.". This is odd");
+        throw new UnexpectedValueException("No plugin name found in ".__CLASS__.". This is odd.");
     }
 
     protected function isPackage(string $packageName, PackageEvent $event): bool
@@ -58,8 +58,10 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
     public function onPackageInstall(PackageEvent $event)
     {
-        if (!$this->isPackage($this->getPluginName(), $event) && !$this->isPackage($this->packagist, $event)) return;
-
+        dump($this->isPackage($this->getPluginName(), $event));
+        dump($this->isPackage("easycorp/easyadmin-bundle", $event));
+        // if (!$this->isPackage($this->getPluginName(), $event) && !$this->isPackage($this->packagist, $event)) return;
+        return;
         foreach($this->getAllClasses() as $className) {
 
             if(in_array(PluginHookInterface::class, class_implements($className))) {
@@ -72,7 +74,10 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
     public function onPackageUpdate(PackageEvent $event)
     {
-        if (!$this->isPackage($this->getPluginName(), $event) && !$this->isPackage($this->packagist, $event)) return;
+        // if (!$this->isPackage($this->getPluginName(), $event) && !$this->isPackage($this->packagist, $event)) return;
+        dump($this->isPackage($this->getPluginName(), $event));
+        dump($this->isPackage("easycorp/easyadmin-bundle", $event));
+        return;
 
         foreach($this->getAllClasses() as $className) {
 
