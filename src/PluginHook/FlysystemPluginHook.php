@@ -4,7 +4,7 @@ namespace Base\Composer\PluginHook;
 
 use Composer\Installer\PackageEvent;
 
-final class EasyAdminPluginHook extends AbstractPluginHook
+final class FlysystemPluginHook extends AbstractPluginHook
 {
     public function getPackageName(): string { return 'Flysystem'; }
     public function getPackagePath(): string { return 'league/flysystem-bundle'; }
