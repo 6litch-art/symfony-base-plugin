@@ -32,11 +32,9 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
     protected function getPluginName(): string
     {
-        $composerFile = Factory::getComposerFile();
-        dump(Factory::getComposerFile());
+        $composerFile = dirname(__FILE__)."/../composer.json";
         $composerJson = json_decode(file_get_contents($composerFile), associative: true, flags: JSON_THROW_ON_ERROR);
 
-        dump($composerJson);
         if(array_key_exists("name", $composerJson))
             return $composerJson['name'];
 
