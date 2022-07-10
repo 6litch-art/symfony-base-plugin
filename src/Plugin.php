@@ -56,7 +56,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
     public function onPackageInstall(PackageEvent $event)
     {
-        foreach(ClassMapGenerator::createMap(__DIR__) as $className) {
+        foreach(ClassMapGenerator::createMap(__DIR__) as $className => $_) {
 
             if(!in_array(PluginHookInterface::class, class_implements($className))) continue;
 
@@ -83,7 +83,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
     public function onPackageUpdate(PackageEvent $event)
     {
-        foreach(ClassMapGenerator::createMap(__DIR__) as $className) {
+        foreach(ClassMapGenerator::createMap(__DIR__) as $className => $_) {
 
             if(!in_array(PluginHookInterface::class, class_implements($className))) continue;
 
