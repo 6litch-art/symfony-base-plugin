@@ -35,7 +35,8 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
         $composerFile = Factory::getComposerFile();
         $composerJson = json_decode(file_get_contents($composerFile), associative: true, flags: JSON_THROW_ON_ERROR);
 
-        if(!array_key_exists("name", $composerJson))
+        dump($composerJson);
+        if(array_key_exists("name", $composerJson))
             return $composerJson['name'];
 
         throw new UnexpectedValueException("No plugin name found in ".__CLASS__.". This is odd");
