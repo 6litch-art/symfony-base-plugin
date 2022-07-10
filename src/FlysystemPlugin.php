@@ -13,12 +13,12 @@ use Composer\IO\IOInterface;
 use Composer\Package\PackageInterface;
 use Composer\Plugin\PluginInterface;
 
-final class BackupManagerPlugin implements PluginInterface, EventSubscriberInterface
+final class EasyAdminPlugin implements PluginInterface, EventSubscriberInterface
 {
     private IOInterface $io;
 
-    public const __PACKAGE_NAME__   = "TimeMachine";
-    protected $packagist = 'backup-manager/backup-manager';
+    public const __PACKAGE_NAME__ = "FlySystem";
+    protected $packagist = 'league/flysystem-bundle';
 
     public static function getSubscribedEvents()
     {
@@ -38,7 +38,10 @@ final class BackupManagerPlugin implements PluginInterface, EventSubscriberInter
         if (!$this->isComposerWorkingOn($this->packagist, $event) && !$this->isComposerWorkingOn('xkzl/base-plugin', $event))
             return;
 
-        $this->changePrivateToProtectedPropertiesFromManagerClass();
+        $this->removeFinalFromAllClasses();
+        $this->removeSelfFromAllClasses();
+        $this->changePrivateToProtectedPropertiesFromAllClasses();
+        $this->changeNewSelfToNewStaticFromAllClasses();
     }
 
     public function onPackageUpdate(PackageEvent $event)
@@ -46,22 +49,16 @@ final class BackupManagerPlugin implements PluginInterface, EventSubscriberInter
         if (!$this->isComposerWorkingOn($this->packagist, $event) && !$this->isComposerWorkingOn('xkzl/base-plugin', $event))
             return;
 
-        $this->changePrivateToProtectedPropertiesFromManagerClass();
+        $this->changePrivateToProtectedPropertiesFromLazyFactory();
     }
 
-    public function changePrivateToProtectedPropertiesFromManagerClass()
+    public function changePrivateToProtectedPropertiesFromLazyFactory()
     {
         $vendorDirPath = $this->getVendorDirPath();
-        $bundleDirPath = $vendorDirPath.'/'.$this->packagist;
+        $filePath = $vendorDirPath.'/'.$this->packagist.'/src/Lazy/LazyFactory.php';
+        file_put_contents($filePath, str_replace('private ', 'protected ', file_get_contents($filePath)), flags: \LOCK_EX );
 
-        $filePath = $bundleDirPath."/src/Manager.php";
-        file_put_contents(
-            $filePath,
-            str_replace('private $', 'protected $', file_get_contents($filePath)),
-            flags: \LOCK_EX
-        );
-
-        $this->io->write('    '.self::$pluginName.' Updated "Manager.php" file. Turn private properties into protected properties');
+        $this->io->write('    '.self::$pluginName.' Updated "./Lazy/LazyFactory.php" file to turn private properties into protected properties');
     }
 
     private function isComposerWorkingOn(string $packageName, PackageEvent $event): bool
@@ -92,7 +89,7 @@ final class BackupManagerPlugin implements PluginInterface, EventSubscriberInter
     }
 
     /**
-     * @return iterable Returns the file paths of all PHP files that contain EasyAdmin classes
+     * @return iterable Returns the file paths of all PHP files that contain classes
      */
     private function getFilePathsOfAllClasses(string $bundleDirPath): iterable
     {

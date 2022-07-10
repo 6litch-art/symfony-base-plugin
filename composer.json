@@ -30,6 +30,6 @@
     "sort-packages": true
   },
   "extra": {
-    "class": "Base\\Composer\\Plugin\\EasyAdminPlugin"
+    "class": "Base\\Composer\\Plugin\\"
   }
 }
