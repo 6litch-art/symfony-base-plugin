@@ -55,13 +55,11 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
     public function onPackageInstall(PackageEvent $event)
     {
-        foreach($this->getAllClasses() as $className) {
+        foreach(get_declared_classes() as $className) {
 
             if(!in_array(PluginHookInterface::class, class_implements($className))) continue;
 
             $class = new $className();
-            dump("install ? ", $class->getPackageName(), $this->getInstalledPackages($event));
-
             if(in_array($class->getPackageName(), $this->getInstalledPackages($event)))
                 $class->onPackageInstall($event);
         }
@@ -81,72 +79,13 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
     public function onPackageUpdate(PackageEvent $event)
     {
-        foreach($this->getAllClasses() as $className) {
+        foreach(get_declared_classes() as $className) {
 
-            dump(class_implements($className));
             if(!in_array(PluginHookInterface::class, class_implements($className))) continue;
 
             $class = new $className();
-            dump("update ? ", $class->getPackageName(), $this->getUpdatedPackages($event));
-
-            if(in_array($class->getPackageName(), $this->getUpdatedPackages($event))) {
-
-                dump("update ? ", $class->getPackageName());
+            if(in_array($class->getPackageName(), $this->getUpdatedPackages($event)))
                 $class->onPackageUpdate($event);
-            }
         }
-    }
-
-    public static function getAllClasses(string $path = "", string $prefix = ""): array
-    {
-        $classes = [];
-
-        $filenames = self::getFilePaths($path);
-        foreach ($filenames as $filename) {
-
-            if(filesize($filename) == 0) continue;
-            if(str_ends_with($filename, "Interface")) continue;
-
-            $classes[] = self::getFullNamespace($filename, $prefix) . self::getClassname($filename);
-        }
-
-        return $classes;
-    }
-
-    public static function getClassname($filename)
-    {
-        $directoriesAndFilename = explode('/', $filename);
-        $filename = array_pop($directoriesAndFilename);
-        $nameAndExtension = explode('.', $filename);
-        $className = array_shift($nameAndExtension);
-        return $className;
-    }
-
-    public static function getFullNamespace($filename, $prefix = "")
-    {
-        $lines = file($filename);
-        $array = preg_grep('/^namespace /', $lines);
-        $namespace = array_shift($array);
-
-        $match = [];
-        if( preg_match('/^namespace (\\\\?)'. addslashes($prefix).'(\\\\?)(.*);$/', $namespace, $match) ) {
-
-            $array = array_pop($match);
-            if(!empty($array)) return $array."\\";
-        }
-
-        return "";
-    }
-
-    public static function getFilePaths($path)
-    {
-        if(!file_exists($path)) return [];
-
-        $finderFiles = Finder::create()->files()->in($path)->name('*.php');
-        $filenames = [];
-        foreach ($finderFiles as $finderFile)
-            $filenames[] = $finderFile->getRealpath();
-
-        return $filenames;
     }
 }
