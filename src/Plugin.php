@@ -1,19 +1,16 @@
 <?php
 
-namespace Base\Composer\Plugin;
+namespace Base\Composer;
 
-use Base\Composer\PluginHookInterface;
 use Composer\Composer;
-use Composer\DependencyResolver\Operation\InstallOperation;
-use Composer\DependencyResolver\Operation\UpdateOperation;
-use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\Factory;
 use Composer\Installer\PackageEvent;
 use Composer\Installer\PackageEvents;
 use Composer\IO\IOInterface;
-use Composer\Package\PackageInterface;
 use Composer\Plugin\PluginInterface;
+use Composer\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Finder\Finder;
+
 use UnexpectedValueException;
 
 function file_replace(array|string $search, array|string $replace, array|string $fname, &$count)
