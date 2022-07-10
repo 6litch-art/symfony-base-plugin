@@ -41,53 +41,52 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
         throw new UnexpectedValueException("No plugin name found in ".__CLASS__.". This is odd.");
     }
 
-    protected function isPackage(string $packageName, PackageEvent $event): bool
+    protected function getInstalledPackages(PackageEvent $event): array
     {
-        $package = null;
-
+        $packages = [];
         foreach ($event->getOperations() as $operation) {
 
-            if ('install' === $operation->getOperationType())
-                $package = $operation->getPackage();
-            else if ('update' === $operation->getOperationType())
-                $package = $operation->getInitialPackage();
-
-            dump($package?->getName());
+            if($operation->getOperationType() == 'install')
+                $packages[] = $operation->getPackage();
         }
 
-        return $packageName === $package?->getName();
+        return $packages;
     }
 
     public function onPackageInstall(PackageEvent $event)
     {
-        dump($this->isPackage("xkzl/base-plugin", $event));
-        dump($this->isPackage("easycorp/easyadmin-bundle", $event));
-        // if (!$this->isPackage($this->getPluginName(), $event) && !$this->isPackage($this->packagist, $event)) return;
-        return;
         foreach($this->getAllClasses() as $className) {
 
             if(in_array(PluginHookInterface::class, class_implements($className))) {
 
                 $class = new $className();
-                $class->onPackageInstall($event);
+                if(in_array($class->getPackageName(), $this->getInstalledPackages($event)))
+                    $class->onPackageInstall($event);
             }
         }
     }
 
+    protected function getUpdatedPackages(PackageEvent $event): array
+    {
+        $packages = [];
+        foreach ($event->getOperations() as $operation) {
+
+            if($operation->getOperationType() == 'update')
+                $packages[] = $operation->getInitialPackage();
+        }
+
+        return $packages;
+    }
+
     public function onPackageUpdate(PackageEvent $event)
     {
-        // if (!$this->isPackage($this->getPluginName(), $event) && !$this->isPackage($this->packagist, $event)) return;
-
-        dump($this->isPackage("xkzl/base-plugin", $event));
-        dump($this->isPackage("easycorp/easyadmin-bundle", $event));
-        return;
-
         foreach($this->getAllClasses() as $className) {
 
             if(in_array(PluginHookInterface::class, class_implements($className))) {
 
                 $class = new $className();
-                $class->onPackageUpdate($event);
+                if(in_array($class->getPackageName(), $this->getUpdatedPackages($event)))
+                    $class->onPackageUpdate($event);
             }
         }
     }
