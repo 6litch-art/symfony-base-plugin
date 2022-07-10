@@ -8,6 +8,8 @@ use Composer\Installer\PackageEvent;
 use Composer\IO\IOInterface;
 use UnexpectedValueException;
 
+include_once("../../bootstrap.php");
+
 abstract class AbstractPluginHook implements PluginHookInterface
 {
     public static IOInterface $io;
