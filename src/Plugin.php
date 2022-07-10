@@ -52,7 +52,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
             else if ('update' === $operation->getOperationType())
                 $package = $operation->getInitialPackage();
 
-            dump($package);
+            dump($package?->getName());
         }
 
         return $packageName === $package?->getName();
