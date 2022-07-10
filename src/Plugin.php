@@ -47,7 +47,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
         foreach ($event->getOperations() as $operation) {
 
             if($operation->getOperationType() == 'install')
-                $packages[] = $operation->getPackage();
+                $packages[] = $operation->getPackage()?->getName();
         }
 
         return $packages;
@@ -55,14 +55,12 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
     public function onPackageInstall(PackageEvent $event)
     {
-        foreach(get_declared_classes() as $class) {
+        foreach(get_declared_classes() as $className) {
 
-            if(!in_array(PluginHookInterface::class, class_implements($class))) continue;
-
-            dump($class::class, $this->getInstalledPackages($event));
+            if(!in_array(PluginHookInterface::class, class_implements($className))) continue;
 
             try { $class = new $className(); }
-            catch (\Error $e) { dump($e); continue; }
+            catch (\Error $e) { continue; }
 
             if(in_array($class->getPackageName(), $this->getInstalledPackages($event)))
                 $class->onPackageInstall($event);
@@ -75,7 +73,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
         foreach ($event->getOperations() as $operation) {
 
             if($operation->getOperationType() == 'update')
-                $packages[] = $operation->getInitialPackage();
+                $packages[] = $operation->getInitialPackage()?->getName();
         }
 
         return $packages;
@@ -83,16 +81,13 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
     public function onPackageUpdate(PackageEvent $event)
     {
-        foreach(get_declared_classes() as $class) {
+        foreach(get_declared_classes() as $className) {
 
-            if(!in_array(PluginHookInterface::class, class_implements($class))) continue;
-
-            dump($class::class, $this->getInstalledPackages($event));
+            if(!in_array(PluginHookInterface::class, class_implements($className))) continue;
 
             try { $class = new $className(); }
-            catch (\Error $e) { dump($e); continue; }
+            catch (\Error $e) { continue; }
 
-            dump($class->getPackageName(), $this->getUpdatedPackages($event));
             if(in_array($class->getPackageName(), $this->getUpdatedPackages($event)))
                 $class->onPackageUpdate($event);
         }
