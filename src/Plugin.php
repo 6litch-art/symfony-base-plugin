@@ -59,6 +59,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
             if(!in_array(PluginHookInterface::class, class_implements($className))) continue;
 
+            dump($className);
             try { $class = new $className(); }
             catch (\Error $e) { continue; }
 
@@ -84,6 +85,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
         foreach(get_declared_classes() as $className) {
 
             if(!in_array(PluginHookInterface::class, class_implements($className))) continue;
+            dump($className);
 
             try { $class = new $className(); }
             catch (\Error $e) { continue; }
