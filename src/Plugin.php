@@ -2,6 +2,7 @@
 
 namespace Base\Composer;
 
+use Base\Composer\PluginHook\AbstractPluginHook;
 use Composer\Composer;
 use Composer\Factory;
 use Composer\Installer\PackageEvent;
