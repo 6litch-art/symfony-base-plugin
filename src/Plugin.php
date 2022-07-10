@@ -57,14 +57,13 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
     {
         foreach($this->getAllClasses() as $className) {
 
-            if(in_array(PluginHookInterface::class, class_implements($className))) {
+            if(!in_array(PluginHookInterface::class, class_implements($className))) continue;
 
-                $class = new $className();
-                if(in_array($class->getPackageName(), $this->getInstalledPackages($event))) {
-                    dump("install ", $class->getPackageName());
-                    $class->onPackageInstall($event);
-                }
-            }
+            $class = new $className();
+            dump("install ? ", $class->getPackageName(), $this->getInstalledPackages($event));
+
+            if(in_array($class->getPackageName(), $this->getInstalledPackages($event)))
+                $class->onPackageInstall($event);
         }
     }
 
@@ -84,14 +83,16 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
     {
         foreach($this->getAllClasses() as $className) {
 
-            if(in_array(PluginHookInterface::class, class_implements($className))) {
+            dump(class_implements($className));
+            if(!in_array(PluginHookInterface::class, class_implements($className))) continue;
 
-                $class = new $className();
-                if(in_array($class->getPackageName(), $this->getUpdatedPackages($event))) {
+            $class = new $className();
+            dump("update ? ", $class->getPackageName(), $this->getUpdatedPackages($event));
 
-                    dump("update ", $class->getPackageName());
-                    $class->onPackageUpdate($event);
-                }
+            if(in_array($class->getPackageName(), $this->getUpdatedPackages($event))) {
+
+                dump("update ? ", $class->getPackageName());
+                $class->onPackageUpdate($event);
             }
         }
     }
