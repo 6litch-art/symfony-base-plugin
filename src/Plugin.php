@@ -59,7 +59,9 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
             if(!in_array(PluginHookInterface::class, class_implements($className))) continue;
 
-            $class = new $className();
+            try { $class = new $className(); }
+            catch (\Exception $e) { continue; }
+
             if(in_array($class->getPackageName(), $this->getInstalledPackages($event)))
                 $class->onPackageInstall($event);
         }
@@ -83,7 +85,9 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
             if(!in_array(PluginHookInterface::class, class_implements($className))) continue;
 
-            $class = new $className();
+            try { $class = new $className(); }
+            catch (\Exception $e) { continue; }
+
             if(in_array($class->getPackageName(), $this->getUpdatedPackages($event)))
                 $class->onPackageUpdate($event);
         }
