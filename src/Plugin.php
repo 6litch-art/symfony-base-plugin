@@ -12,6 +12,7 @@ use Composer\Plugin\PluginInterface;
 use Composer\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Finder\Finder;
 
+use Composer\Autoload\ClassMapGenerator;
 use UnexpectedValueException;
 
 include_once(dirname(__FILE__)."/../bootstrap.php");
@@ -55,7 +56,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
     public function onPackageInstall(PackageEvent $event)
     {
-        foreach(get_declared_classes() as $className) {
+        foreach(ClassMapGenerator::createMap(__DIR__) as $className) {
 
             if(!in_array(PluginHookInterface::class, class_implements($className))) continue;
 
@@ -82,11 +83,11 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
     public function onPackageUpdate(PackageEvent $event)
     {
-        foreach(get_declared_classes() as $className) {
+        foreach(ClassMapGenerator::createMap(__DIR__) as $className) {
 
             if(!in_array(PluginHookInterface::class, class_implements($className))) continue;
-            dump($className);
 
+            dump($className);
             try { $class = new $className(); }
             catch (\Error $e) { continue; }
 
