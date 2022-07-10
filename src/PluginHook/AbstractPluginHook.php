@@ -17,7 +17,7 @@ abstract class AbstractPluginHook implements PluginHookInterface
     public function onPackageUpdate (PackageEvent $event) { throw new UnexpectedValueException("Please override ".static::class."::".__METHOD__); }
 
     protected function getProjectDir(): string { return dirname(realpath(Factory::getComposerFile())); }
-    protected function getBundleDir(): string { return $this->getVendorDir().'/'.$this->getPackagePath(); }
+    protected function getBundleDir(): string { return $this->getVendorDir().'/'.$this->getPackage(); }
     protected function getVendorDir(): string
     {
         $composerFile = Factory::getComposerFile();

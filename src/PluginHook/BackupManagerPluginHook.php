@@ -6,8 +6,8 @@ use Composer\Installer\PackageEvent;
 
 final class BackupManagerPluginHook extends AbstractPluginHook
 {
+    public function getPackage():string { return 'backup-manager/backup-manager'; }
     public function getPackageName():string { return 'BackupManager'; }
-    public function getPackagePath():string { return 'backup-manager/backup-manager'; }
 
     public function onPackageInstall(PackageEvent $event)
     {

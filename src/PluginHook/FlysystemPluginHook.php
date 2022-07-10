@@ -6,8 +6,8 @@ use Composer\Installer\PackageEvent;
 
 final class FlysystemPluginHook extends AbstractPluginHook
 {
+    public function getPackage(): string { return 'league/flysystem-bundle'; }
     public function getPackageName(): string { return 'Flysystem'; }
-    public function getPackagePath(): string { return 'league/flysystem-bundle'; }
 
     public function onPackageInstall(PackageEvent $event)
     {
