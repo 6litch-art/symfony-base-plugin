@@ -1,6 +1,6 @@
 <?php
 
-function file_replace(array|string $search, array|string $replace, array|string $fname, &$count)
+function file_replace(array|string $search, array|string $replace, array|string $fname, int &$count = null)
 {
     if(!is_array($fname)) $fname = [$fname];
     foreach($fname as $f)
