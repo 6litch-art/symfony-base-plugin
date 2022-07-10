@@ -47,6 +47,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
         foreach ($event->getOperations() as $operation) {
 
+            dump($operation->getPackage(), $operation->getInitialPackage());
             if ('install' === $operation->getOperationType())
                 $package = $operation->getPackage();
             else if ('update' === $operation->getOperationType())
