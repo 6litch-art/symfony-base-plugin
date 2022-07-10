@@ -42,7 +42,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
         throw new UnexpectedValueException("No plugin name found in ".__CLASS__.". This is odd.");
     }
 
-    protected function getInstalledPackages(PackageEvent $event): array
+    protected function getInstalledPackageNames(PackageEvent $event): array
     {
         $packages = [];
         foreach ($event->getOperations() as $operation) {
@@ -63,12 +63,12 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
             try { $class = new $className(); }
             catch (\Error $e) { continue; }
 
-            if(in_array($class->getPackage(), $this->getInstalledPackages($event)))
+            if(in_array($class->getPackageName(), $this->getInstalledPackageNames($event)))
                 $class->onPackageInstall($event);
         }
     }
 
-    protected function getUpdatedPackages(PackageEvent $event): array
+    protected function getUpdatedPackageNames(PackageEvent $event): array
     {
         $packages = [];
         foreach ($event->getOperations() as $operation) {
@@ -89,7 +89,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
             try { $class = new $className(); }
             catch (\Error $e) { continue; }
 
-            if(in_array($class->getPackage(), $this->getUpdatedPackages($event)))
+            if(in_array($class->getPackageName(), $this->getUpdatedPackageNames($event)))
                 $class->onPackageUpdate($event);
         }
     }

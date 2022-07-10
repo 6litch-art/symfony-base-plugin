@@ -6,8 +6,7 @@ use Composer\Installer\PackageEvent;
 
 final class EasyAdminPluginHook extends AbstractPluginHook
 {
-    public function getPackage(): string { return 'easycorp/easyadmin-bundle'; }
-    public function getPackageName(): string { return 'EasyAdmin'; }
+    public function getPackageName(): string { return 'easycorp/easyadmin-bundle'; }
 
     public function onPackageInstall(PackageEvent $event)
     {

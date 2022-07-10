@@ -11,13 +11,13 @@ use UnexpectedValueException;
 abstract class AbstractPluginHook implements PluginHookInterface
 {
     public static IOInterface $io;
-    public function Print(string $msg) { self::$io->write("    \033[0;35m* ".$this->getPackageName()."@BasePlugin\033[0m " . $msg); }
+    public function Print(string $msg) { self::$io->write("    \033[0;35m* ".$this->getPackageName()."\033[0m " . $msg); }
 
     public function onPackageInstall(PackageEvent $event) { throw new UnexpectedValueException("Please override ".static::class."::".__METHOD__); }
     public function onPackageUpdate (PackageEvent $event) { throw new UnexpectedValueException("Please override ".static::class."::".__METHOD__); }
 
     protected function getProjectDir(): string { return dirname(realpath(Factory::getComposerFile())); }
-    protected function getBundleDir(): string { return $this->getVendorDir().'/'.$this->getPackage(); }
+    protected function getBundleDir(): string { return $this->getVendorDir().'/'.$this->getPackageName(); }
     protected function getVendorDir(): string
     {
         $composerFile = Factory::getComposerFile();
