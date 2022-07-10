@@ -58,7 +58,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
     public function onPackageInstall(PackageEvent $event)
     {
-        dump($this->isPackage($this->getPluginName(), $event));
+        dump($this->isPackage("xkzl/base-plugin", $event));
         dump($this->isPackage("easycorp/easyadmin-bundle", $event));
         // if (!$this->isPackage($this->getPluginName(), $event) && !$this->isPackage($this->packagist, $event)) return;
         return;
@@ -75,7 +75,8 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
     public function onPackageUpdate(PackageEvent $event)
     {
         // if (!$this->isPackage($this->getPluginName(), $event) && !$this->isPackage($this->packagist, $event)) return;
-        dump($this->isPackage($this->getPluginName(), $event));
+
+        dump($this->isPackage("xkzl/base-plugin", $event));
         dump($this->isPackage("easycorp/easyadmin-bundle", $event));
         return;
 
