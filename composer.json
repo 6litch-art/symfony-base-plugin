@@ -30,6 +30,6 @@
     "sort-packages": true
   },
   "extra": {
-    "class": "Base\\Composer\\Plugin\\"
+    "class": "Base\\Composer\\Plugin"
   }
 }
