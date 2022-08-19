@@ -12,7 +12,7 @@ final class AliasPluginHook extends AbstractPluginHook
     {
         file_replace(
             '$this->_metadataCache[$relation[\'targetEntity\']]',
-            '$this->_metadataCache[$relation[\'targetEntity\']] ?? $this->_metadataCache[str_replace("App\\", "Base\\", $relation[\'targetEntity\'])]',
+            '$this->_metadataCache[$relation[\'targetEntity\']] ?? $this->_metadataCache[str_replace("App\\\\", "Base\\\\", $relation[\'targetEntity\'])]',
             $this->getBundleDir()."/lib/Doctrine/ORM/Internal/Hydration/ObjectHydrator.php"
         );
 
@@ -23,7 +23,7 @@ final class AliasPluginHook extends AbstractPluginHook
     {
         file_replace(
             '$this->_metadataCache[$relation[\'targetEntity\']]',
-            '$this->_metadataCache[$relation[\'targetEntity\']] ?? $this->_metadataCache[str_replace("App\\", "Base\\", $relation[\'targetEntity\'])]',
+            '$this->_metadataCache[$relation[\'targetEntity\']] ?? $this->_metadataCache[str_replace("App\\\\", "Base\\\\", $relation[\'targetEntity\'])]',
             $this->getBundleDir()."/lib/Doctrine/ORM/Internal/Hydration/ObjectHydrator.php"
         );
 
