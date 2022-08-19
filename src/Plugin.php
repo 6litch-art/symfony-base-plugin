@@ -54,9 +54,10 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
         return $packages;
     }
 
+    protected array $installedPackageNames = [];
     public function onPackageInstall(PackageEvent $event)
     {
-        dump(ClassMapGenerator::createMap(__DIR__));
+        dump($event);
         foreach(ClassMapGenerator::createMap(__DIR__) as $className => $_) {
 
             if(!in_array(PluginHookInterface::class, class_implements($className))) continue;
