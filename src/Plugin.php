@@ -42,23 +42,13 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
         throw new UnexpectedValueException("No plugin name found in ".__CLASS__.". This is odd.");
     }
 
-    protected function getInstalledPackageNames(PackageEvent $event): array
-    {
-        $packages = [];
-        foreach ($event->getOperations() as $operation) {
-
-            if($operation->getOperationType() == 'install')
-                $packages[] = $operation->getPackage()?->getName();
-        }
-
-        return $packages;
-    }
-
     protected array $installedPackageNames = [];
     public function onPackageInstall(PackageEvent $event)
     {
         $operation = $event->getOperation();
         $packageName = $operation->getPackage()?->getName();
+        if ($this->installedPackageNames) return;
+            $this->installedPackageNames[] = $packageName;
 
         foreach(ClassMapGenerator::createMap(__DIR__) as $className => $_) {
 
@@ -68,27 +58,18 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
             catch (\Error $e) { continue; }
 
             if($class->getPackageName() != $packageName) continue;
-            if(!in_array($packageName, $this->getInstalledPackageNames($event)))
-                $class->onPackageInstall($event);
+
+            $class->onPackageInstall($event);
         }
     }
 
-    protected function getUpdatedPackageNames(PackageEvent $event): array
-    {
-        $packages = [];
-        foreach ($event->getOperations() as $operation) {
-
-            if($operation->getOperationType() == 'update')
-                $packages[] = $operation->getInitialPackage()?->getName();
-        }
-
-        return $packages;
-    }
-
+    protected array $updatedPackageNames = [];
     public function onPackageUpdate(PackageEvent $event)
     {
         $operation = $event->getOperation();
         $packageName = $operation->getInitialPackage()?->getName();
+        if ($this->updatedPackageNames) return;
+            $this->updatedPackageNames[] = $packageName;
 
         foreach(ClassMapGenerator::createMap(__DIR__) as $className => $_) {
 
@@ -98,8 +79,8 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
             catch (\Error $e) { continue; }
 
             if($class->getPackageName() != $packageName) continue;
-            if(!in_array($packageName, $this->getUpdatedPackageNames($event)))
-                $class->onPackageUpdate($event);
+
+            $class->onPackageUpdate($event);
         }
     }
 }
