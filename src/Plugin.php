@@ -47,8 +47,10 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
     {
         $operation = $event->getOperation();
         $packageName = $operation->getPackage()?->getName();
-        if ($this->installedPackageNames) return;
-            $this->installedPackageNames[] = $packageName;
+        if (in_array($packageName, $this->installedPackageNames))
+            return;
+
+        $this->installedPackageNames[] = $packageName;
 
         foreach(ClassMapGenerator::createMap(__DIR__) as $className => $_) {
 
@@ -68,8 +70,10 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
     {
         $operation = $event->getOperation();
         $packageName = $operation->getInitialPackage()?->getName();
-        if ($this->updatedPackageNames) return;
-            $this->updatedPackageNames[] = $packageName;
+        if (in_array($packageName, $this->updatedPackageNames))
+            return;
+
+        $this->updatedPackageNames[] = $packageName;
 
         foreach(ClassMapGenerator::createMap(__DIR__) as $className => $_) {
 
