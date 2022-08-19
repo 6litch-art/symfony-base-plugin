@@ -57,14 +57,11 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
     protected array $installedPackageNames = [];
     public function onPackageInstall(PackageEvent $event)
     {
-        /** @var InstallOperation|UpdateOperation $operation */
         $operation = $event->getOperation();
 
         $package = method_exists($operation, 'getPackage')
             ? $operation->getPackage()
             : $operation->getInitialPackage();
-
-        dump($package->getName());
 
         foreach(ClassMapGenerator::createMap(__DIR__) as $className => $_) {
 
@@ -73,7 +70,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
             try { $class = new $className(); }
             catch (\Error $e) { continue; }
 
-            if(in_array($class->getPackageName(), $this->getInstalledPackageNames($event)))
+            if(in_array($package->getName(), $this->getInstalledPackageNames($event)))
                 $class->onPackageInstall($event);
         }
     }
@@ -92,14 +89,10 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
     public function onPackageUpdate(PackageEvent $event)
     {
-        /** @var InstallOperation|UpdateOperation $operation */
         $operation = $event->getOperation();
-
         $package = method_exists($operation, 'getPackage')
             ? $operation->getPackage()
             : $operation->getInitialPackage();
-
-        dump($package->getName());
 
         foreach(ClassMapGenerator::createMap(__DIR__) as $className => $_) {
 
@@ -108,7 +101,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
             try { $class = new $className(); }
             catch (\Error $e) { continue; }
 
-            if(in_array($class->getPackageName(), $this->getUpdatedPackageNames($event)))
+            if(in_array($package->getName(), $this->getUpdatedPackageNames($event)))
                 $class->onPackageUpdate($event);
         }
     }
