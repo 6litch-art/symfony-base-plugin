@@ -19,6 +19,7 @@ include_once(dirname(__FILE__)."/../bootstrap.php");
 
 final class Plugin implements PluginInterface, EventSubscriberInterface
 {
+    public static function getPackageName() { return "xkzl/base-plugin"; }
     public static function getSubscribedEvents()
     {
         return [
@@ -59,7 +60,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
             try { $class = new $className(); }
             catch (\Error $e) { continue; }
 
-            if($class->getPackageName() != $packageName) continue;
+            if($class->getPackageName() != $packageName && $this->getPackageName() != $packageName) continue;
 
             $class->onPackageInstall($event);
         }
@@ -82,7 +83,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
             try { $class = new $className(); }
             catch (\Error $e) { continue; }
 
-            if($class->getPackageName() != $packageName) continue;
+            if($class->getPackageName() != $packageName && $this->getPackageName() != $packageName) continue;
 
             $class->onPackageUpdate($event);
         }
