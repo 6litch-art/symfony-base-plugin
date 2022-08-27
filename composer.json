@@ -16,7 +16,7 @@
     "composer-plugin-api": "^2.0",
     "easycorp/easyadmin-bundle": "*",
     "backup-manager/backup-manager": "*",
-    "league/flysystem": "*"
+    "league/flysystem-bundle": "*"
   },
   "require-dev": {
     "composer/composer": "^2.0"
