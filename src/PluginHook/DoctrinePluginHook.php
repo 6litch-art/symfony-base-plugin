@@ -15,7 +15,7 @@ final class DoctrinePluginHook extends AbstractPluginHook
     }
     public function onPackageUpdate(PackageEvent $event)
     {
-        file_replace('private $', 'protected $', $this->getBundleDir().'/src/Persistence/Mapping/AbstractClassMetadataFactory.php');
+        file_replace('private $', 'protected function', $this->getBundleDir().'/src/Persistence/Mapping/AbstractClassMetadataFactory.php');
         $this->Print('Updated "./Persistence/Mapping/AbstractClassMetadataFactory.php" file. Turn private methods into protected methods');
     }
 }
