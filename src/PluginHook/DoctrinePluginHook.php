@@ -32,13 +32,13 @@ final class DoctrinePluginHook extends AbstractPluginHook
             '$this->_metadataCache[$relation[\'targetEntity\']] ?? $this->_metadataCache[str_replace("App\\\\", "Base\\\\", $relation[\'targetEntity\'])]',
             $this->getBundleDir()."/lib/Doctrine/ORM/Internal/Hydration/ObjectHydrator.php"
         );
-        $this->Print('Updated "Manager.php" file. Turn private properties into protected properties');
+        $this->Print('Updated "Manager.php" file. Turn private methods into protected methods');
 
         file_replace(
             'private function',
             'protected function',
             $this->getBundleDir()."/lib/Doctrine/ORM/Query/SqlWalker.php"
         );
-        $this->Print('Updated "SqlWalker.php" file. Turn private properties into protected properties');
+        $this->Print('Updated "SqlWalker.php" file. Turn private methods into protected methods');
     }
 }
