@@ -1,5 +1,5 @@
 {
-  "name": "xkzl/base-plugin",
+  "name": "glitchr/base-plugin",
   "type": "composer-plugin",
   "description": "Base plugin integration for Symfony",
   "keywords": ["symfony", "base", "helper", "plugin"],
