@@ -19,7 +19,7 @@ include_once(dirname(__FILE__)."/../bootstrap.php");
 
 final class Plugin implements PluginInterface, EventSubscriberInterface
 {
-    public static function getPackageName() { return "xkzl/base-plugin"; }
+    public static function getPackageName() { return "glitchr/base-plugin"; }
     public static function getSubscribedEvents()
     {
         return [
