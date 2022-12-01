@@ -11,12 +11,12 @@ final class FlysystemPluginHook extends AbstractPluginHook
     public function onPackageInstall(PackageEvent $event)
     {
         file_replace('private $', 'protected $', $this->getBundleDir().'/src/Lazy/LazyFactory.php');
-        $this->Print('Updated "./Lazy/LazyFactory.php" file. Turn private properties into protected properties');
+        $this->Print('Updated "./Lazy/LazyFactory.php" file. Turn `private` properties into `protected` properties');
     }
 
     public function onPackageUpdate(PackageEvent $event)
     {
         file_replace('private $', 'protected $', $this->getBundleDir().'/src/Lazy/LazyFactory.php');
-        $this->Print('Updated "./Lazy/LazyFactory.php" file. Turn private properties into protected properties');
+        $this->Print('Updated "./Lazy/LazyFactory.php" file. Turn `private` properties into `protected` properties');
     }
 }

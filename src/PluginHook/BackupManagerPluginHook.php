@@ -11,12 +11,12 @@ final class BackupManagerPluginHook extends AbstractPluginHook
     public function onPackageInstall(PackageEvent $event)
     {
         file_replace('private $', 'protected $', $this->getBundleDir()."/src/Manager.php");
-        $this->Print('Updated "Manager.php" file. Turn private properties into protected properties');
+        $this->Print('Updated "Manager.php" file. Turn `private` properties into `protected` properties');
     }
 
     public function onPackageUpdate(PackageEvent $event)
     {
         file_replace('private $', 'protected $', $this->getBundleDir()."/src/Manager.php");
-        $this->Print('Updated "Manager.php" file. Turn private properties into protected properties');
+        $this->Print('Updated "Manager.php" file. Turn `private` properties into `protected` properties');
     }
 }
