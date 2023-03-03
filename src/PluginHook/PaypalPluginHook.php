@@ -10,17 +10,11 @@ final class PaypalPluginHook extends AbstractPluginHook
 
     public function onPackageInstall(PackageEvent $event)
     {
-//        file_replace('@internal', '', $this->getBundleDir().'/src/Lazy/LazyFactory.php');
-//        $this->Print('Updated "./Lazy/LazyFactory.php" file. Remove `@internal` flag');
-//        file_replace('private $', 'protected $', $this->getBundleDir().'/src/Lazy/LazyFactory.php');
-//        $this->Print('Updated "./Lazy/LazyFactory.php" file. Turn `private` properties into `protected` properties');
+        file_replace('sizeof($v) <= 0 && is_array($v)', 'is_array($v) && sizeof($v) <= 0', $this->getBundleDir().'/lib/PayPal/Common/PayPalModel.php');
     }
 
     public function onPackageUpdate(PackageEvent $event)
     {
-//        file_replace('@internal', '', $this->getBundleDir().'/src/Lazy/LazyFactory.php');
-//        $this->Print('Updated "./Lazy/LazyFactory.php" file. Remove `@internal` flag');
-//        file_replace('private $', 'protected $', $this->getBundleDir().'/src/Lazy/LazyFactory.php');
-//        $this->Print('Updated "./Lazy/LazyFactory.php" file. Turn `private` properties into `protected` properties');
+        file_replace('sizeof($v) <= 0 && is_array($v)', 'is_array($v) && sizeof($v) <= 0', $this->getBundleDir().'/lib/PayPal/Common/PayPalModel.php');
     }
 }
