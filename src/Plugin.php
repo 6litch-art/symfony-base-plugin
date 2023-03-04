@@ -61,8 +61,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
             try { $class = new $className(); }
             catch (\Error $e) { continue; }
 
-            if(!InstalledVersions::isInstalled($className)) continue;
-            if($class->getPackageName() != $packageName && $this->getPackageName() != $packageName) continue;
+            if($class->getPackageName() != $packageName) continue;
 
             $class->onPackageInstall($event);
         }
