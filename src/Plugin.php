@@ -61,9 +61,8 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
             try { $class = new $className(); }
             catch (\Error $e) { continue; }
 
-            echo $class->getPackageName().PHP_EOL;
-            echo InstalledVersions::isInstalled($class->getPackageName()).PHP_EOL;
-            if($class->getPackageName() != $packageName) continue;
+            if(!InstalledVersions::isInstalled($class->getPackageName())) continue;
+            if($class->getPackageName() != $packageName && $this->getPackageName() != $packageName) continue;
 
             $class->onPackageInstall($event);
         }
@@ -86,8 +85,6 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
             try { $class = new $className(); }
             catch (\Error $e) { continue; }
 
-            echo $class->getPackageName().PHP_EOL;
-            echo InstalledVersions::isInstalled($class->getPackageName()).PHP_EOL;
             if(!InstalledVersions::isInstalled($class->getPackageName())) continue;
             if($class->getPackageName() != $packageName && $this->getPackageName() != $packageName) continue;
 
