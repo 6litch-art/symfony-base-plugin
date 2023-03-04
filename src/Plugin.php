@@ -62,9 +62,10 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
             if($class->getPackageName() != $packageName && $this->getPackageName() != $packageName) continue;
 
-            dump($class, $event);
-            dump($class->getPackageName(), $packageName);
-            dump($this->getPackageName(), $packageName);
+            echo ($class);
+            echo ($class->getPackageName());
+            echo $this->getPackageName();
+            echo $packageName;
             $class->onPackageInstall($event);
         }
     }
@@ -88,9 +89,10 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
             if($class->getPackageName() != $packageName && $this->getPackageName() != $packageName) continue;
 
-            dump($class, $event);
-            dump($class->getPackageName(), $packageName);
-            dump($this->getPackageName(), $packageName);
+            echo ($class);
+            echo ($class->getPackageName());
+            echo $this->getPackageName();
+            echo $packageName;
             $class->onPackageUpdate($event);
         }
     }
