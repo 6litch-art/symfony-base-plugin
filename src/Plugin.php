@@ -62,7 +62,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
             if($class->getPackageName() != $packageName && $this->getPackageName() != $packageName) continue;
 
-            echo ($class);
+            echo ($className);
             echo ($class->getPackageName());
             echo $this->getPackageName();
             echo $packageName;
@@ -89,7 +89,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
             if($class->getPackageName() != $packageName && $this->getPackageName() != $packageName) continue;
 
-            echo ($class);
+            echo ($className);
             echo ($class->getPackageName());
             echo $this->getPackageName();
             echo $packageName;
