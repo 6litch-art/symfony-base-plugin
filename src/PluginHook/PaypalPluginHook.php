@@ -11,10 +11,12 @@ final class PaypalPluginHook extends AbstractPluginHook
     public function onPackageInstall(PackageEvent $event)
     {
         file_replace('sizeof($v) <= 0 && is_array($v)', 'is_array($v) && sizeof($v) <= 0', $this->getBundleDir().'/lib/PayPal/Common/PayPalModel.php');
+        $this->Print('Updated "./lib/PayPal/Common/PayPalModel.php" file. `Check is_array($v)` first');
     }
 
     public function onPackageUpdate(PackageEvent $event)
     {
         file_replace('sizeof($v) <= 0 && is_array($v)', 'is_array($v) && sizeof($v) <= 0', $this->getBundleDir().'/lib/PayPal/Common/PayPalModel.php');
+        $this->Print('Updated "./lib/PayPal/Common/PayPalModel.php" file. `Check is_array($v)` first');
     }
 }
