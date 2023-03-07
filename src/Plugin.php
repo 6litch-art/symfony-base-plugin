@@ -13,6 +13,7 @@ use Composer\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Finder\Finder;
 
 use Composer\Autoload\ClassMapGenerator;
+use Composer\InstalledVersions;
 use UnexpectedValueException;
 
 include_once(dirname(__FILE__)."/../bootstrap.php");
@@ -60,6 +61,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
             try { $class = new $className(); }
             catch (\Error $e) { continue; }
 
+            if(!InstalledVersions::isInstalled($class->getPackageName())) continue;
             if($class->getPackageName() != $packageName && $this->getPackageName() != $packageName) continue;
 
             $class->onPackageInstall($event);
@@ -83,6 +85,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
             try { $class = new $className(); }
             catch (\Error $e) { continue; }
 
+            if(!InstalledVersions::isInstalled($class->getPackageName())) continue;
             if($class->getPackageName() != $packageName && $this->getPackageName() != $packageName) continue;
 
             $class->onPackageUpdate($event);
