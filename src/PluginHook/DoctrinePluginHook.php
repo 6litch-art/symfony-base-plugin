@@ -6,7 +6,10 @@ use Composer\Installer\PackageEvent;
 
 final class DoctrinePluginHook extends AbstractPluginHook
 {
-    public function getPackageName():string { return 'doctrine/orm'; }
+    public function getPackageName(): string
+    {
+        return 'doctrine/orm';
+    }
 
     public function onPackageInstall(PackageEvent $event)
     {

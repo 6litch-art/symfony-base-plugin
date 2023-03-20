@@ -20,7 +20,10 @@ include_once(dirname(__FILE__)."/../bootstrap.php");
 
 final class Plugin implements PluginInterface, EventSubscriberInterface
 {
-    public static function getPackageName() { return "glitchr/base-plugin"; }
+    public static function getPackageName()
+    {
+        return "glitchr/base-plugin";
+    }
     public static function getSubscribedEvents()
     {
         return [
@@ -29,17 +32,25 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
         ];
     }
 
-    public function activate  (Composer $composer, IOInterface $io) { AbstractPluginHook::$io = $io; }
-    public function deactivate(Composer $composer, IOInterface $io) {}
-    public function uninstall (Composer $composer, IOInterface $io) {}
+    public function activate(Composer $composer, IOInterface $io)
+    {
+        AbstractPluginHook::$io = $io;
+    }
+    public function deactivate(Composer $composer, IOInterface $io)
+    {
+    }
+    public function uninstall(Composer $composer, IOInterface $io)
+    {
+    }
 
     protected function getPluginName(): string
     {
         $composerFile = dirname(__FILE__)."/../composer.json";
         $composerJson = json_decode(file_get_contents($composerFile), associative: true, flags: JSON_THROW_ON_ERROR);
 
-        if(array_key_exists("name", $composerJson))
+        if (array_key_exists("name", $composerJson)) {
             return $composerJson['name'];
+        }
 
         throw new UnexpectedValueException("No plugin name found in ".__CLASS__.". This is odd.");
     }
@@ -49,20 +60,29 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
     {
         $operation = $event->getOperation();
         $packageName = $operation->getPackage()?->getName();
-        if (in_array($packageName, $this->installedPackageNames))
+        if (in_array($packageName, $this->installedPackageNames)) {
             return;
+        }
 
         $this->installedPackageNames[] = $packageName;
 
-        foreach(ClassMapGenerator::createMap(__DIR__) as $className => $_) {
+        foreach (ClassMapGenerator::createMap(__DIR__) as $className => $_) {
+            if (!in_array(PluginHookInterface::class, class_implements($className))) {
+                continue;
+            }
 
-            if(!in_array(PluginHookInterface::class, class_implements($className))) continue;
+            try {
+                $class = new $className();
+            } catch (\Error $e) {
+                continue;
+            }
 
-            try { $class = new $className(); }
-            catch (\Error $e) { continue; }
-
-            if(!InstalledVersions::isInstalled($class->getPackageName())) continue;
-            if($class->getPackageName() != $packageName && $this->getPackageName() != $packageName) continue;
+            if (!InstalledVersions::isInstalled($class->getPackageName())) {
+                continue;
+            }
+            if ($class->getPackageName() != $packageName && $this->getPackageName() != $packageName) {
+                continue;
+            }
 
             $class->onPackageInstall($event);
         }
@@ -73,20 +93,29 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
     {
         $operation = $event->getOperation();
         $packageName = $operation->getInitialPackage()?->getName();
-        if (in_array($packageName, $this->updatedPackageNames))
+        if (in_array($packageName, $this->updatedPackageNames)) {
             return;
+        }
 
         $this->updatedPackageNames[] = $packageName;
 
-        foreach(ClassMapGenerator::createMap(__DIR__) as $className => $_) {
+        foreach (ClassMapGenerator::createMap(__DIR__) as $className => $_) {
+            if (!in_array(PluginHookInterface::class, class_implements($className))) {
+                continue;
+            }
 
-            if(!in_array(PluginHookInterface::class, class_implements($className))) continue;
+            try {
+                $class = new $className();
+            } catch (\Error $e) {
+                continue;
+            }
 
-            try { $class = new $className(); }
-            catch (\Error $e) { continue; }
-
-            if(!InstalledVersions::isInstalled($class->getPackageName())) continue;
-            if($class->getPackageName() != $packageName && $this->getPackageName() != $packageName) continue;
+            if (!InstalledVersions::isInstalled($class->getPackageName())) {
+                continue;
+            }
+            if ($class->getPackageName() != $packageName && $this->getPackageName() != $packageName) {
+                continue;
+            }
 
             $class->onPackageUpdate($event);
         }

@@ -6,7 +6,10 @@ use Composer\Installer\PackageEvent;
 
 final class PaypalPluginHook extends AbstractPluginHook
 {
-    public function getPackageName(): string { return 'paypal/rest-api-sdk-php'; }
+    public function getPackageName(): string
+    {
+        return 'paypal/rest-api-sdk-php';
+    }
 
     public function onPackageInstall(PackageEvent $event)
     {
