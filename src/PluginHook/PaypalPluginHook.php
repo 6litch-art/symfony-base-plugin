@@ -15,11 +15,15 @@ final class PaypalPluginHook extends AbstractPluginHook
     {
         file_replace('sizeof($v) <= 0 && is_array($v)', 'is_array($v) && sizeof($v) <= 0', $this->getBundleDir().'/lib/PayPal/Common/PayPalModel.php');
         $this->Print('Updated "./lib/PayPal/Common/PayPalModel.php" file. `Check is_array($v)` first');
+        file_replace('$handlers = array()', '$handlers', $this->getBundleDir().'/lib/PayPal/Transport/PayPalRestCall.php');
+        $this->Print('Updated "./lib/PayPal/Transport/PayPalRestCall.php" file. `Optional parameter $handlers declaration` removed');
     }
 
     public function onPackageUpdate(PackageEvent $event)
     {
         file_replace('sizeof($v) <= 0 && is_array($v)', 'is_array($v) && sizeof($v) <= 0', $this->getBundleDir().'/lib/PayPal/Common/PayPalModel.php');
         $this->Print('Updated "./lib/PayPal/Common/PayPalModel.php" file. `Check is_array($v)` first');
+        file_replace('$handlers = array()', '$handlers', $this->getBundleDir().'/lib/PayPal/Transport/PayPalRestCall.php');
+        $this->Print('Updated "./lib/PayPal/Transport/PayPalRestCall.php" file. `Optional parameter $handlers declaration` removed');
     }
 }
