@@ -66,7 +66,7 @@ final class EasyAdminPluginHook extends AbstractPluginHook
     }
 
 
-    public function emableMultiWordSearch()
+    public function enableMultiWordSearch()
     {
         file_replace("'%'.\$lowercaseQuery.'%'", "'%'.str_replace(' ', '%', \$lowercaseQuery).'%'", $this->getBundleDir().'/src/Orm/EntityRepository.php');
         $this->Print('Updated `./Orm/EntityRepository.php` file. Allow multi word search in CRUD controllers.');
