@@ -17,6 +17,7 @@ final class EasyAdminPluginHook extends AbstractPluginHook
         $this->removeSelfFromAllClasses();
         $this->changePrivateToProtectedPropertiesFromAllClasses();
         $this->changeNewSelfToNewStaticFromAllClasses();
+        $this->enableMultiWordSearch();
     }
 
     public function onPackageUpdate(PackageEvent $event)
@@ -25,6 +26,7 @@ final class EasyAdminPluginHook extends AbstractPluginHook
         $this->removeSelfFromAllClasses();
         $this->changePrivateToProtectedPropertiesFromAllClasses();
         $this->changeNewSelfToNewStaticFromAllClasses();
+        $this->enableMultiWordSearch();
     }
 
     public function removeFinalFromAllClasses()
@@ -61,5 +63,12 @@ final class EasyAdminPluginHook extends AbstractPluginHook
         }
 
         $this->Print('Updated all PHP files. Turn `private` properties into `protected` properties');
+    }
+
+
+    public function emableMultiWordSearch()
+    {
+        file_replace("'%'.\$lowercaseQuery.'%'", "'%'.str_replace(' ', '%', \$lowercaseQuery).'%'", $this->getBundleDir().'/src/Orm/EntityRepository.php');
+        $this->Print('Updated `./Orm/EntityRepository.php` file. Allow multi word search in CRUD controllers.');
     }
 }
