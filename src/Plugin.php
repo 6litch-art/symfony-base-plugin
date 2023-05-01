@@ -14,13 +14,22 @@ use Composer\Plugin\PluginInterface;
 
 include_once dirname(__FILE__) . '/../bootstrap.php';
 
+/**
+ *
+ */
 final class Plugin implements PluginInterface, EventSubscriberInterface
 {
+    /**
+     * @return string
+     */
     public static function getPackageName()
     {
         return 'glitchr/base-plugin';
     }
 
+    /**
+     * @return string[]
+     */
     public static function getSubscribedEvents()
     {
         return [

@@ -4,6 +4,9 @@ namespace Base\Composer\PluginHook;
 
 use Composer\Installer\PackageEvent;
 
+/**
+ *
+ */
 final class DoctrinePluginHook extends AbstractPluginHook
 {
     public function getPackageName(): string
