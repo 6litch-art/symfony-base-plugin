@@ -10,6 +10,7 @@ use Composer\Installer\PackageEvents;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
 use Composer\EventDispatcher\EventSubscriberInterface;
+use Error;
 use Symfony\Component\Finder\Finder;
 
 use Composer\Autoload\ClassMapGenerator;
@@ -73,7 +74,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
             try {
                 $class = new $className();
-            } catch (\Error $e) {
+            } catch (Error $e) {
                 continue;
             }
 
@@ -106,7 +107,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
             try {
                 $class = new $className();
-            } catch (\Error $e) {
+            } catch (Error $e) {
                 continue;
             }
 
