@@ -12,7 +12,7 @@ use Composer\Installer\PackageEvents;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
 
-include_once dirname(__FILE__).'/../bootstrap.php';
+include_once dirname(__FILE__) . '/../bootstrap.php';
 
 final class Plugin implements PluginInterface, EventSubscriberInterface
 {
@@ -44,14 +44,14 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
     private function getPluginName(): string
     {
-        $composerFile = dirname(__FILE__).'/../composer.json';
+        $composerFile = dirname(__FILE__) . '/../composer.json';
         $composerJson = json_decode(file_get_contents($composerFile), associative: true, flags: JSON_THROW_ON_ERROR);
 
         if (array_key_exists('name', $composerJson)) {
             return $composerJson['name'];
         }
 
-        throw new \UnexpectedValueException('No plugin name found in '.__CLASS__.'. This is odd.');
+        throw new \UnexpectedValueException('No plugin name found in ' . __CLASS__ . '. This is odd.');
     }
 
     private array $installedPackageNames = [];
