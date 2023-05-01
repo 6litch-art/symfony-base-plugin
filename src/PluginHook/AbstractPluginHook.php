@@ -6,10 +6,6 @@ use Base\Composer\PluginHookInterface;
 use Composer\Factory;
 use Composer\Installer\PackageEvent;
 use Composer\IO\IOInterface;
-use FilesystemIterator;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-use UnexpectedValueException;
 
 abstract class AbstractPluginHook implements PluginHookInterface
 {
@@ -17,17 +13,17 @@ abstract class AbstractPluginHook implements PluginHookInterface
 
     public function Print(string $msg)
     {
-        self::$io->write("    \033[0;35m* " . $this->getPackageName() . "\033[0m " . $msg);
+        self::$io->write("    \033[0;35m* ".$this->getPackageName()."\033[0m ".$msg);
     }
 
     public function onPackageInstall(PackageEvent $event)
     {
-        throw new UnexpectedValueException("Please override " . static::class . "::" . __METHOD__);
+        throw new \UnexpectedValueException('Please override '.static::class.'::'.__METHOD__);
     }
 
     public function onPackageUpdate(PackageEvent $event)
     {
-        throw new UnexpectedValueException("Please override " . static::class . "::" . __METHOD__);
+        throw new \UnexpectedValueException('Please override '.static::class.'::'.__METHOD__);
     }
 
     protected function getProjectDir(): string
@@ -37,7 +33,7 @@ abstract class AbstractPluginHook implements PluginHookInterface
 
     protected function getBundleDir(): string
     {
-        return $this->getVendorDir() . '/' . $this->getPackageName();
+        return $this->getVendorDir().'/'.$this->getPackageName();
     }
 
     protected function getVendorDir(): string
@@ -45,12 +41,12 @@ abstract class AbstractPluginHook implements PluginHookInterface
         $composerFile = Factory::getComposerFile();
         $composerJson = json_decode(file_get_contents($composerFile), associative: true, flags: JSON_THROW_ON_ERROR);
 
-        return $composerJson['config']['vendor-dir'] ?? $this->getProjectDir() . '/vendor';
+        return $composerJson['config']['vendor-dir'] ?? $this->getProjectDir().'/vendor';
     }
 
     protected function getBundlePHPFiles(): iterable
     {
-        foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($this->getBundleDir(), FilesystemIterator::SKIP_DOTS)) as $filePath) {
+        foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->getBundleDir(), \FilesystemIterator::SKIP_DOTS)) as $filePath) {
             if (is_dir($filePath) || !str_ends_with($filePath, '.php')) {
                 continue;
             }

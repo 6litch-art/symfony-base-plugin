@@ -3,33 +3,29 @@
 namespace Base\Composer;
 
 use Base\Composer\PluginHook\AbstractPluginHook;
+use Composer\Autoload\ClassMapGenerator;
 use Composer\Composer;
-use Composer\Factory;
+use Composer\EventDispatcher\EventSubscriberInterface;
+use Composer\InstalledVersions;
 use Composer\Installer\PackageEvent;
 use Composer\Installer\PackageEvents;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
-use Composer\EventDispatcher\EventSubscriberInterface;
-use Error;
-use Symfony\Component\Finder\Finder;
 
-use Composer\Autoload\ClassMapGenerator;
-use Composer\InstalledVersions;
-use UnexpectedValueException;
-
-include_once(dirname(__FILE__)."/../bootstrap.php");
+include_once dirname(__FILE__).'/../bootstrap.php';
 
 final class Plugin implements PluginInterface, EventSubscriberInterface
 {
     public static function getPackageName()
     {
-        return "glitchr/base-plugin";
+        return 'glitchr/base-plugin';
     }
+
     public static function getSubscribedEvents()
     {
         return [
             PackageEvents::POST_PACKAGE_INSTALL => 'onPackageInstall',
-            PackageEvents::POST_PACKAGE_UPDATE  => 'onPackageUpdate',
+            PackageEvents::POST_PACKAGE_UPDATE => 'onPackageUpdate',
         ];
     }
 
@@ -37,26 +33,29 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
     {
         AbstractPluginHook::$io = $io;
     }
+
     public function deactivate(Composer $composer, IOInterface $io)
     {
     }
+
     public function uninstall(Composer $composer, IOInterface $io)
     {
     }
 
-    protected function getPluginName(): string
+    private function getPluginName(): string
     {
-        $composerFile = dirname(__FILE__)."/../composer.json";
+        $composerFile = dirname(__FILE__).'/../composer.json';
         $composerJson = json_decode(file_get_contents($composerFile), associative: true, flags: JSON_THROW_ON_ERROR);
 
-        if (array_key_exists("name", $composerJson)) {
+        if (array_key_exists('name', $composerJson)) {
             return $composerJson['name'];
         }
 
-        throw new UnexpectedValueException("No plugin name found in ".__CLASS__.". This is odd.");
+        throw new \UnexpectedValueException('No plugin name found in '.__CLASS__.'. This is odd.');
     }
 
-    protected array $installedPackageNames = [];
+    private array $installedPackageNames = [];
+
     public function onPackageInstall(PackageEvent $event)
     {
         $operation = $event->getOperation();
@@ -74,7 +73,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
             try {
                 $class = new $className();
-            } catch (Error $e) {
+            } catch (\Error $e) {
                 continue;
             }
 
@@ -89,7 +88,8 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
         }
     }
 
-    protected array $updatedPackageNames = [];
+    private array $updatedPackageNames = [];
+
     public function onPackageUpdate(PackageEvent $event)
     {
         $operation = $event->getOperation();
@@ -107,7 +107,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
             try {
                 $class = new $className();
-            } catch (Error $e) {
+            } catch (\Error $e) {
                 continue;
             }
 
