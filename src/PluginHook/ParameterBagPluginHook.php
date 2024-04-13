@@ -18,13 +18,13 @@ final class ParameterBagPluginHook extends AbstractPluginHook
     {
         $this->Print('Updated "FrozenBagContainer.php" file. Turn returned values less restricting using (void)');
 
-        file_replace(': never', ': void ', $this->getBundleDir() . '/src/Component/DependencyInjection/ParameterBag/FrozenParameterBag.php');
+        file_replace(': never', ': void ', $this->getBundleDir() . '/ParameterBag/FrozenParameterBag.php');
     }
 
     public function onPackageUpdate(PackageEvent $event)
     {
         $this->Print('Updated "FrozenBagContainer.php" file. Turn returned values less restricting using (void)');
 
-        file_replace(': never', ': void ', $this->getBundleDir() . '/src/Component/DependencyInjection/ParameterBag/FrozenParameterBag.php');
+        file_replace(': never', ': void ', $this->getBundleDir() . '/ParameterBag/FrozenParameterBag.php');
     }
 }
