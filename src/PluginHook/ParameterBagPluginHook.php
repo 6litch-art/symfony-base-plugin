@@ -11,7 +11,7 @@ final class ParameterBagPluginHook extends AbstractPluginHook
 {
     public function getPackageName(): string
     {
-        return 'symfony/symfony';
+        return 'symfony/framework-bundle';
     }
 
     public function onPackageInstall(PackageEvent $event)

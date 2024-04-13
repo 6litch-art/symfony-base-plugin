@@ -76,6 +76,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
         $this->installedPackageNames[] = $packageName;
 
         foreach (ClassMapGenerator::createMap(__DIR__) as $className => $_) {
+
             if (!in_array(PluginHookInterface::class, class_implements($className))) {
                 continue;
             }
@@ -110,6 +111,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
         $this->updatedPackageNames[] = $packageName;
 
         foreach (ClassMapGenerator::createMap(__DIR__) as $className => $_) {
+
             if (!in_array(PluginHookInterface::class, class_implements($className))) {
                 continue;
             }
