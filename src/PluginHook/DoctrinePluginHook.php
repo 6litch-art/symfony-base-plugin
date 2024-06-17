@@ -19,7 +19,7 @@ final class DoctrinePluginHook extends AbstractPluginHook
         file_replace(
             '$this->_metadataCache[$relation[\'targetEntity\']]',
             '$this->_metadataCache[$relation[\'targetEntity\']] ?? $this->_metadataCache[str_replace("App\\\\", "Base\\\\", $relation[\'targetEntity\'])]',
-            $this->getBundleDir() . '/lib/Doctrine/ORM/Internal/Hydration/ObjectHydrator.php'
+            $this->getBundleDir() . '/src/Internal/Hydration/ObjectHydrator.php'
         );
         $this->Print('Updated "ObjectHydrator.php" file. Add metadata cache fallback for base component');
 
