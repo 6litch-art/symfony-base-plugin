@@ -2,7 +2,7 @@
 
 namespace Base\Composer;
 
-use Base\Composer\PluginHook\AbstractPluginHook;
+use Base\Composer\PluginHook\Common\AbstractPluginHook;
 use Composer\Autoload\ClassMapGenerator;
 use Composer\Composer;
 use Composer\EventDispatcher\EventSubscriberInterface;
