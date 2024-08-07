@@ -7,7 +7,7 @@ use Composer\Installer\PackageEvent;
 /**
  *
  */
-final class ParameterBagPluginHook extends AbstractPluginHook
+final class ParameterBagPluginHook extends Common\AbstractPluginHook
 {
     public function getPackageName(): string
     {

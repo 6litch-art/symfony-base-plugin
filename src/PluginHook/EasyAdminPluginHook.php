@@ -7,7 +7,7 @@ use Composer\Installer\PackageEvent;
 /**
  *
  */
-final class EasyAdminPluginHook extends AbstractPluginHook
+final class EasyAdminPluginHook extends Common\AbstractPluginHook
 {
     public function getPackageName(): string
     {

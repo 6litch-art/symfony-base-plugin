@@ -7,7 +7,7 @@ use Composer\Installer\PackageEvent;
 /**
  *
  */
-final class FlysystemPluginHook extends AbstractPluginHook
+final class FlysystemPluginHook extends Common\AbstractPluginHook
 {
     public function getPackageName(): string
     {

@@ -7,7 +7,7 @@ use Composer\Installer\PackageEvent;
 /**
  *
  */
-final class DoctrinePluginHook extends AbstractPluginHook
+final class DoctrinePluginHook extends Common\AbstractPluginHook
 {
     public function getPackageName(): string
     {

@@ -7,7 +7,7 @@ use Composer\Installer\PackageEvent;
 /**
  *
  */
-final class PolyfillPluginHook extends AbstractPluginHook
+final class PolyfillPluginHook extends Common\AbstractPluginHook
 {
     public function getPackageName(): string
     {

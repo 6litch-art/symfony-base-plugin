@@ -1,6 +1,6 @@
 <?php
 
-namespace Base\Composer\PluginHook;
+namespace Base\Composer\PluginHook\Common;
 
 use Doctrine\Composer\PluginHookInterface;
 use Composer\Factory;
