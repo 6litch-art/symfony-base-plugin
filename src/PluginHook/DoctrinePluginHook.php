@@ -14,7 +14,7 @@ final class DoctrinePluginHook extends AbstractPluginHook
         return 'doctrine/orm';
     }
 
-    public function onPackageEvent(PackageEvent $event)
+    public function onPackageChange(PackageEvent $event)
     {
         file_replace(
             '$this->_metadataCache[$relation[\'targetEntity\']]',

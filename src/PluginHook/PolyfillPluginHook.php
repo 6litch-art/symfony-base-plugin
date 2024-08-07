@@ -14,7 +14,7 @@ final class PolyfillPluginHook extends AbstractPluginHook
         return 'symfony/polyfill-mbstring';
     }
 
-    public function onPackageEvent(PackageEvent $event)
+    public function onPackageChange(PackageEvent $event)
     {
         $this->Print('Updated "bootstrap80.php" file. Removing string restricted implementation of `mb_[u|l]cfirst()` due to conflict.');
         file_remove_line('mb_ucfirst($string', $this->getBundleDir() . '/bootstrap80.php');

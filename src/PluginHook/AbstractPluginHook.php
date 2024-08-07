@@ -2,7 +2,7 @@
 
 namespace Base\Composer\PluginHook;
 
-use Base\Composer\PluginHookInterface;
+use Doctrine\Composer\PluginHookInterface;
 use Composer\Factory;
 use Composer\Installer\PackageEvent;
 use Composer\IO\IOInterface;
@@ -23,7 +23,7 @@ abstract class AbstractPluginHook implements PluginHookInterface
      * @param PackageEvent $event
      * @return mixed
      */
-    public function onPackageEvent(PackageEvent $event)
+    public function onPackageChange(PackageEvent $event)
     {
         throw new \UnexpectedValueException('Please override ' . static::class . '::' . __METHOD__);
     }
@@ -32,9 +32,9 @@ abstract class AbstractPluginHook implements PluginHookInterface
      * @param PackageEvent $event
      * @return mixed
      */
-    public function onPackageUpdate(PackageEvent $event)
+    public function onPackageInstall(PackageEvent $event)
     {
-        this->onPackageEvent($event);
+        $this->onPackageChange($event);
     }
 
     /**
@@ -43,7 +43,15 @@ abstract class AbstractPluginHook implements PluginHookInterface
      */
     public function onPackageUpdate(PackageEvent $event)
     {
-        this->onPackageEvent($event);
+        $this->onPackageChange($event);
+    }
+
+    /**
+     * @param PackageEvent $event
+     * @return mixed
+     */
+    public function onPackageRemove(PackageEvent $event)
+    {
     }
 
     protected function getProjectDir(): string

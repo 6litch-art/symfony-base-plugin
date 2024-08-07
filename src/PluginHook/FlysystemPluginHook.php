@@ -14,7 +14,7 @@ final class FlysystemPluginHook extends AbstractPluginHook
         return 'league/flysystem-bundle';
     }
 
-    public function onPackageEvent(PackageEvent $event)
+    public function onPackageChange(PackageEvent $event)
     {
         file_replace('@internal', '', $this->getBundleDir() . '/src/Lazy/LazyFactory.php');
         $this->Print('Updated "./Lazy/LazyFactory.php" file. Remove `@internal` flag');
