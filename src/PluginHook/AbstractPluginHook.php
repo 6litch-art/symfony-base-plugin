@@ -23,7 +23,7 @@ abstract class AbstractPluginHook implements PluginHookInterface
      * @param PackageEvent $event
      * @return mixed
      */
-    public function onPackageInstall(PackageEvent $event)
+    public function onPackageEvent(PackageEvent $event)
     {
         throw new \UnexpectedValueException('Please override ' . static::class . '::' . __METHOD__);
     }
@@ -34,7 +34,16 @@ abstract class AbstractPluginHook implements PluginHookInterface
      */
     public function onPackageUpdate(PackageEvent $event)
     {
-        throw new \UnexpectedValueException('Please override ' . static::class . '::' . __METHOD__);
+        this->onPackageEvent($event);
+    }
+
+    /**
+     * @param PackageEvent $event
+     * @return mixed
+     */
+    public function onPackageUpdate(PackageEvent $event)
+    {
+        this->onPackageEvent($event);
     }
 
     protected function getProjectDir(): string

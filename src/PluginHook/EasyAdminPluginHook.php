@@ -14,16 +14,7 @@ final class EasyAdminPluginHook extends AbstractPluginHook
         return 'easycorp/easyadmin-bundle';
     }
 
-    public function onPackageInstall(PackageEvent $event)
-    {
-        $this->removeFinalFromAllClasses();
-        $this->removeSelfFromAllClasses();
-        $this->changePrivateToProtectedPropertiesFromAllClasses();
-        $this->changeNewSelfToNewStaticFromAllClasses();
-        $this->enableMultiWordSearch();
-    }
-
-    public function onPackageUpdate(PackageEvent $event)
+    public function onPackageEvent(PackageEvent $event)
     {
         $this->removeFinalFromAllClasses();
         $this->removeSelfFromAllClasses();

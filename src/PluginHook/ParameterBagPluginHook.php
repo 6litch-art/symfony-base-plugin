@@ -14,17 +14,9 @@ final class ParameterBagPluginHook extends AbstractPluginHook
         return 'symfony/dependency-injection';
     }
 
-    public function onPackageInstall(PackageEvent $event)
+    public function onPackageEvent(PackageEvent $event)
     {
         $this->Print('Updated "FrozenBagContainer.php" file. Turn returned values less restrictive using (void)');
-
-        file_replace(': never', ': void ', $this->getBundleDir() . '/ParameterBag/FrozenParameterBag.php');
-    }
-
-    public function onPackageUpdate(PackageEvent $event)
-    {
-        $this->Print('Updated "FrozenBagContainer.php" file. Turn returned values less restrictive using (void)');
-
         file_replace(': never', ': void ', $this->getBundleDir() . '/ParameterBag/FrozenParameterBag.php');
     }
 }
