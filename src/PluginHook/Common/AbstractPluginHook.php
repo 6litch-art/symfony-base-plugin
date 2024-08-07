@@ -2,7 +2,7 @@
 
 namespace Base\Composer\PluginHook\Common;
 
-use Doctrine\Composer\PluginHookInterface;
+use Base\Composer\PluginHookInterface;
 use Composer\Factory;
 use Composer\Installer\PackageEvent;
 use Composer\IO\IOInterface;
