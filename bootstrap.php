@@ -1,28 +1,30 @@
 <?php
 
 // Function to track if a change has already been made
-function file_has_changes(array|string $fname, string $checkString): bool
-{
-    if (!is_array($fname)) {
-        $fname = [$fname];
+if (!function_exists('file_line_replace')) {
+    function file_has_changes(array|string $fname, string $checkString): bool
+    {
+        if (!is_array($fname)) {
+            $fname = [$fname];
+        }
+
+        foreach ($fname as $f) {
+            if (!file_exists($f)) {
+                continue;
+            }
+
+            $fileContents = file_get_contents($f);
+            if ($fileContents === false) {
+                continue;
+            }
+
+            if (strpos($fileContents, $checkString) !== false) {
+                return true;
+            }
+        }
+
+        return false;
     }
-
-    foreach ($fname as $f) {
-        if (!file_exists($f)) {
-            continue;
-        }
-
-        $fileContents = file_get_contents($f);
-        if ($fileContents === false) {
-            continue;
-        }
-
-        if (strpos($fileContents, $checkString) !== false) {
-            return true;
-        }
-    }
-
-    return false;
 }
 
 if (!function_exists('file_line_replace')) {
