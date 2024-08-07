@@ -17,6 +17,6 @@ final class ParameterBagPluginHook extends Common\AbstractPluginHook
     public function onPackageChange(PackageEvent $event)
     {
         $this->Print('Updated "FrozenBagContainer.php" file. Turn returned values less restrictive using (void)');
-        file_replace(': never', ': void ', $this->getBundleDir() . '/ParameterBag/FrozenParameterBag.php');
+        file_line_replace(': never', ': void ', $this->getBundleDir() . '/ParameterBag/FrozenParameterBag.php', $this->getPackageName());
     }
 }

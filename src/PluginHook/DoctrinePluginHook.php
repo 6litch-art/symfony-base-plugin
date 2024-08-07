@@ -16,17 +16,17 @@ final class DoctrinePluginHook extends Common\AbstractPluginHook
 
     public function onPackageChange(PackageEvent $event)
     {
-        file_replace(
+        file_line_replace(
             '$this->_metadataCache[$relation[\'targetEntity\']]',
             '$this->_metadataCache[$relation[\'targetEntity\']] ?? $this->_metadataCache[str_replace("App\\\\", "Base\\\\", $relation[\'targetEntity\'])]',
             $this->getBundleDir() . '/src/Internal/Hydration/ObjectHydrator.php'
         );
         $this->Print('Updated "ObjectHydrator.php" file. Add metadata cache fallback for base component');
 
-        file_replace('private ', 'protected ', $this->getBundleDir() . '/src/Query/SqlWalker.php');
+        file_line_replace('private ', 'protected ', $this->getBundleDir() . '/src/Query/SqlWalker.php', $this->getPackageName());
         $this->Print('Updated "SqlWalker.php" file. Turn `private` elements into `protected` elements');
 
-        file_replace('private ', 'protected ', $this->getBundleDir() . '/src/Mapping//ClassMetadataFactory.php');
+        file_line_replace('private ', 'protected ', $this->getBundleDir() . '/src/Mapping//ClassMetadataFactory.php', $this->getPackageName());
         $this->Print('Updated "ClassMetadataFactory.php" file. Turn `private` elements into `protected` elements');
     }
 }

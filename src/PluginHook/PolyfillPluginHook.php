@@ -17,7 +17,7 @@ final class PolyfillPluginHook extends Common\AbstractPluginHook
     public function onPackageChange(PackageEvent $event)
     {
         $this->Print('Updated "bootstrap80.php" file. Removing string restricted implementation of `mb_[u|l]cfirst()` due to conflict.');
-        file_remove_line('mb_ucfirst($string', $this->getBundleDir() . '/bootstrap80.php');
-        file_remove_line('mb_lcfirst($string', $this->getBundleDir() . '/bootstrap80.php');
+        file_line_remove('mb_ucfirst($string', $this->getBundleDir() . '/bootstrap80.php', $this->getPackageName());
+        file_line_remove('mb_lcfirst($string', $this->getBundleDir() . '/bootstrap80.php', $this->getPackageName());
     }
 }
