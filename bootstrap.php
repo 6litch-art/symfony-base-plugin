@@ -91,7 +91,9 @@ if (!function_exists('file_line_replace')) {
             }
             $newContents[] = "######### End of automatic update"; // End of automatic update comment
 
-            echo $newContents;
+            foreach ($newContents as $line) {
+            echo ">>>> $newContents";
+            }
             if (file_put_contents($f, implode(PHP_EOL, $newContents) . PHP_EOL, LOCK_EX) === false) {
                 echo "      Could not write to the file '$f'.\n";
             }
