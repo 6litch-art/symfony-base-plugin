@@ -25,43 +25,43 @@ final class EasyAdminPluginHook extends Common\AbstractPluginHook
 
     public function removeFinalFromAllClasses()
     {
+        $this->Print('Updating all PHP files. Make classes `non-final`');
         foreach ($this->getBundlePHPFiles() as $phpFile) {
             file_line_replace('final class ', 'class ', $phpFile, $this->getPackageName());
         }
 
-        $this->Print('Updated all PHP files. Make classes `non-final`');
     }
 
     public function removeSelfFromAllClasses()
     {
+        $this->Print('Updating all PHP files. Remove all `self` requirements in class method returns');
         foreach ($this->getBundlePHPFiles() as $phpFile) {
             file_line_replace(['): self', '):self', ') :self'], ')', $phpFile, $this->getPackageName());
         }
 
-        $this->Print('Updated all PHP files. Remove all `self` requirements in class method returns');
     }
 
     public function changeNewSelfToNewStaticFromAllClasses()
     {
+        $this->Print('Updating all PHP files. Change all `self` declarations to `static` declarations');
         foreach ($this->getBundlePHPFiles() as $phpFile) {
             file_line_replace('new self', 'new static', $phpFile, $this->getPackageName());
         }
 
-        $this->Print('Updated all PHP files. Change all `self` declarations to `static` declarations');
     }
 
     public function changePrivateToProtectedPropertiesFromAllClasses()
     {
+        $this->Print('Updating all PHP files. Turn `private` properties into `protected` properties');
         foreach ($this->getBundlePHPFiles() as $phpFile) {
             file_line_replace('private ', 'protected ', $phpFile, $this->getPackageName());
         }
 
-        $this->Print('Updated all PHP files. Turn `private` properties into `protected` properties');
     }
 
     public function enableMultiWordSearch()
     {
+        $this->Print('Updating `./Orm/EntityRepository.php` file. Allow multi word search in CRUD controllers.');
         file_line_replace("'%'.\$lowercaseQuery.'%'", "'%'.str_replace(' ', '%', \$lowercaseQuery).'%'", $this->getBundleDir() . '/src/Orm/EntityRepository.php', $this->getPackageName());
-        $this->Print('Updated `./Orm/EntityRepository.php` file. Allow multi word search in CRUD controllers.');
     }
 }

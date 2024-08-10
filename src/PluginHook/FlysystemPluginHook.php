@@ -16,10 +16,10 @@ final class FlysystemPluginHook extends Common\AbstractPluginHook
 
     public function onPackageChange(PackageEvent $event)
     {
+        $this->Print('Updating "./Lazy/LazyFactory.php" file. Remove `@internal` flag');
         file_line_replace('@internal', '', $this->getBundleDir() . '/src/Lazy/LazyFactory.php', $this->getPackageName());
-        $this->Print('Updated "./Lazy/LazyFactory.php" file. Remove `@internal` flag');
 
+        $this->Print('Updating "./Lazy/LazyFactory.php" file. Turn `private` properties into `protected` properties');
         file_line_replace('private ', 'protected ', $this->getBundleDir() . '/src/Lazy/LazyFactory.php', $this->getPackageName());
-        $this->Print('Updated "./Lazy/LazyFactory.php" file. Turn `private` properties into `protected` properties');
     }
 }
