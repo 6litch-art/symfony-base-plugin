@@ -27,7 +27,7 @@ final class EasyAdminPluginHook extends Common\AbstractPluginHook
     {
         $this->Print('Updating all PHP files. Make classes `non-final`');
         foreach ($this->getBundlePHPFiles() as $phpFile) {
-            file_line_replace('final class ', 'class ', $phpFile, $this->getPackageName());
+            file_line_replace('final class ', 'class ', $phpFile);
         }
 
     }
@@ -36,7 +36,7 @@ final class EasyAdminPluginHook extends Common\AbstractPluginHook
     {
         $this->Print('Updating all PHP files. Remove all `self` requirements in class method returns');
         foreach ($this->getBundlePHPFiles() as $phpFile) {
-            file_line_replace(['): self', '):self', ') :self'], ')', $phpFile, $this->getPackageName());
+            file_line_replace(['): self', '):self', ') :self'], ')', $phpFile);
         }
 
     }
@@ -45,7 +45,7 @@ final class EasyAdminPluginHook extends Common\AbstractPluginHook
     {
         $this->Print('Updating all PHP files. Change all `self` declarations to `static` declarations');
         foreach ($this->getBundlePHPFiles() as $phpFile) {
-            file_line_replace('new self', 'new static', $phpFile, $this->getPackageName());
+            file_line_replace('new self', 'new static', $phpFile);
         }
 
     }
@@ -54,7 +54,7 @@ final class EasyAdminPluginHook extends Common\AbstractPluginHook
     {
         $this->Print('Updating all PHP files. Turn `private` properties into `protected` properties');
         foreach ($this->getBundlePHPFiles() as $phpFile) {
-            file_line_replace('private ', 'protected ', $phpFile, $this->getPackageName());
+            file_line_replace('private ', 'protected ', $phpFile);
         }
 
     }
@@ -62,6 +62,6 @@ final class EasyAdminPluginHook extends Common\AbstractPluginHook
     public function enableMultiWordSearch()
     {
         $this->Print('Updating `./Orm/EntityRepository.php` file. Allow multi word search in CRUD controllers.');
-        file_line_replace("'%'.\$lowercaseQuery.'%'", "'%'.str_replace(' ', '%', \$lowercaseQuery).'%'", $this->getBundleDir() . '/src/Orm/EntityRepository.php', $this->getPackageName());
+        file_line_replace("'%'.\$lowercaseQuery.'%'", "'%'.str_replace(' ', '%', \$lowercaseQuery).'%'", $this->getBundleDir() . '/src/Orm/EntityRepository.php');
     }
 }

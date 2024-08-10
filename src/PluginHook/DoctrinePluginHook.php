@@ -24,9 +24,9 @@ final class DoctrinePluginHook extends Common\AbstractPluginHook
         );
 
         $this->Print('Updating "SqlWalker.php" file. Turn `private` elements into `protected` elements');
-        file_line_replace('private ', 'protected ', $this->getBundleDir() . '/src/Query/SqlWalker.php', $this->getPackageName());
+        file_line_replace('private ', 'protected ', $this->getBundleDir() . '/src/Query/SqlWalker.php');
 
         $this->Print('Updating "ClassMetadataFactory.php" file. Turn `private` elements into `protected` elements');
-        file_line_replace('private ', 'protected ', $this->getBundleDir() . '/src/Mapping//ClassMetadataFactory.php', $this->getPackageName());
+        file_line_replace('private ', 'protected ', $this->getBundleDir() . '/src/Mapping//ClassMetadataFactory.php');
     }
 }
