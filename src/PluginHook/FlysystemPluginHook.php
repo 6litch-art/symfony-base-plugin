@@ -19,9 +19,9 @@ final class FlysystemPluginHook extends Common\AbstractPluginHook
         $codeModifier = new \CodeModifier($this->getBundleDir() . '/src/Lazy/LazyFactory.php', $this->getAuthor());
 
         $this->Print('Updating "./Lazy/LazyFactory.php" file. Remove `@internal` flag');
-        $codeModifier->modify("no-internal", '@internal', '');
+        $codeModifier->replace("no-internal", '@internal', '');
 
         $this->Print('Updating "./Lazy/LazyFactory.php" file. Turn `private` properties into `protected` properties');
-        $codeModifier->modify("private-protected", 'private ', 'protected ');
+        $codeModifier->replace("private-protected", 'private ', 'protected ');
     }
 }
