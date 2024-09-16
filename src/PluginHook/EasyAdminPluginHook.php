@@ -27,7 +27,8 @@ final class EasyAdminPluginHook extends Common\AbstractPluginHook
     {
         $this->Print('Updating all PHP files. Make classes `non-final`');
         foreach ($this->getBundlePHPFiles() as $phpFile) {
-            file_line_replace('final class ', 'class ', $phpFile);
+            $codeModifier = new \CodeModifier($phpFile, $this->getAuthor());
+            $codeModifier->modify("non-final", 'final class ', 'class ');
         }
 
     }
@@ -36,7 +37,8 @@ final class EasyAdminPluginHook extends Common\AbstractPluginHook
     {
         $this->Print('Updating all PHP files. Remove all `self` requirements in class method returns');
         foreach ($this->getBundlePHPFiles() as $phpFile) {
-            file_line_replace(['): self', '):self', ') :self'], ')', $phpFile);
+            $codeModifier = new \CodeModifier($phpFile, $this->getAuthor());
+            $codeModifier->modify("no-self", ['): self', '):self', ') :self'], ')');
         }
 
     }
@@ -45,7 +47,8 @@ final class EasyAdminPluginHook extends Common\AbstractPluginHook
     {
         $this->Print('Updating all PHP files. Change all `self` declarations to `static` declarations');
         foreach ($this->getBundlePHPFiles() as $phpFile) {
-            file_line_replace('new self', 'new static', $phpFile);
+            $codeModifier = new \CodeModifier($phpFile, $this->getAuthor());           
+            $codeModifier->modify("self-static", 'new self', 'new static');
         }
 
     }
@@ -54,7 +57,8 @@ final class EasyAdminPluginHook extends Common\AbstractPluginHook
     {
         $this->Print('Updating all PHP files. Turn `private` properties into `protected` properties');
         foreach ($this->getBundlePHPFiles() as $phpFile) {
-            file_line_replace('private ', 'protected ', $phpFile);
+            $codeModifier = new \CodeModifier($phpFile, $this->getAuthor());
+            $codeModifier->modify("private-protected", 'private ', 'protected ');
         }
 
     }
@@ -62,6 +66,7 @@ final class EasyAdminPluginHook extends Common\AbstractPluginHook
     public function enableMultiWordSearch()
     {
         $this->Print('Updating `./Orm/EntityRepository.php` file. Allow multi word search in CRUD controllers.');
-        file_line_replace("'%'.\$lowercaseQuery.'%'", "'%'.str_replace(' ', '%', \$lowercaseQuery).'%'", $this->getBundleDir() . '/src/Orm/EntityRepository.php');
+        $codeModifier = new \CodeModifier($this->getBundleDir() . '/src/Orm/EntityRepository.php', $this->getAuthor());
+        $codeModifier->modify("multiword-fix", "'%'.\$lowercaseQuery.'%'", "'%'.str_replace(' ', '%', \$lowercaseQuery).'%'");
     }
 }

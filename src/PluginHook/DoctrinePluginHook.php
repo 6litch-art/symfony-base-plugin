@@ -17,16 +17,19 @@ final class DoctrinePluginHook extends Common\AbstractPluginHook
     public function onPackageChange(PackageEvent $event)
     {
         $this->Print('Updating "ObjectHydrator.php" file. Add metadata cache fallback for base component');
-        file_line_replace(
+
+        $codeModifier = new \CodeModifier($this->getBundleDir() . '/src/Internal/Hydration/ObjectHydrator.php', $this->getAuthor());
+        $codeModifier->replace("cache-defaulting",
             '$this->_metadataCache[$relation[\'targetEntity\']]',
             '$this->_metadataCache[$relation[\'targetEntity\']] ?? $this->_metadataCache[str_replace("App\\\\", "Base\\\\", $relation[\'targetEntity\'])]',
-            $this->getBundleDir() . '/src/Internal/Hydration/ObjectHydrator.php'
         );
 
-        $this->Print('Updating "SqlWalker.php" file. Turn `private` elements into `protected` elements');
-        file_line_replace('private ', 'protected ', $this->getBundleDir() . '/src/Query/SqlWalker.php');
+        $this->Print('Updating "SqlWalker.php" file. Turn `private` elements into `protected` elements', $this->getAuthor());
+        $codeModifier = new \CodeModifier($this->getBundleDir() . '/src/Query/SqlWalker.php');
+        $codeModifier->replace("private-protected", 'private ', 'protected ');
 
         $this->Print('Updating "ClassMetadataFactory.php" file. Turn `private` elements into `protected` elements');
-        file_line_replace('private ', 'protected ', $this->getBundleDir() . '/src/Mapping//ClassMetadataFactory.php');
+        $codeModifier = new \CodeModifier($this->getBundleDir() . '/src/Mapping/ClassMetadataFactory.php', $this->getAuthor());
+        $codeModifier->replace("private-protected", 'private ', 'protected ');
     }
 }

@@ -56,6 +56,11 @@ abstract class AbstractPluginHook implements PluginHookInterface
     {
     }
 
+    protected function getAuthor(): string
+    {
+        return basename(dirname(__FILE__, 4))."/".basename(dirname(__FILE__, 3));
+    }
+    
     protected function getProjectDir(): string
     {
         return dirname(realpath(Factory::getComposerFile()));
