@@ -1,11 +1,12 @@
 <?php
 
 namespace Base\Composer\PluginHook\Common;
-
 use Base\Composer\PluginHookInterface;
+
 use Composer\Factory;
 use Composer\Installer\PackageEvent;
 use Composer\IO\IOInterface;
+use Composer\Semver\VersionParser;
 
 /**
  *
@@ -17,6 +18,11 @@ abstract class AbstractPluginHook implements PluginHookInterface
     public function Print(string $msg)
     {
         self::$io->write("    \033[0;35m* " . $this->getPackageName() . "\033[0m " . $msg);
+    }
+
+    public function getPackageRequirements(): string
+    {
+        return "*";
     }
 
     /**
@@ -54,6 +60,29 @@ abstract class AbstractPluginHook implements PluginHookInterface
      */
     public function onPackageRemove(PackageEvent $event)
     {
+    }
+    
+    public function checkValidityVersion(PackageEvent $event): bool
+    {
+        $versionParser = new VersionParser();
+        $currentVersion = $this->getPackageVersion($event);
+        $constraint = $this->getPackageRequirements($event);
+        try {
+
+            $constraintObject = $versionParser->parseConstraints($constraint);
+            return $constraintObject->matches($versionParser->parseConstraints($currentVersion));
+
+        } catch (\Exception $e) {
+            
+            return false;
+        }
+
+        return true;
+    }
+
+    public function getPackageVersion(PackageEvent $event): string
+    {
+        return $event->getOperation()->getPackage()->getVersion();
     }
 
     protected function getAuthor(): string
