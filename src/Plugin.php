@@ -55,17 +55,20 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
     private function getPluginName(): string
     {
         $composerFile = dirname(__FILE__) . '/../composer.json';
-        $composerJson = json_decode(file_get_contents($composerFile), associative: true, flags: JSON_THROW_ON_ERROR);
-
-        if (array_key_exists('name', $composerJson)) {
-            return $composerJson['name'];
+        if (!file_exists($composerFile)) {
+            throw new \RuntimeException('Composer file not found: ' . $composerFile);
         }
-
-        throw new \UnexpectedValueException('No plugin name found in ' . __CLASS__ . '. This is odd.');
+    
+        $composerJson = json_decode(file_get_contents($composerFile), true, 512, JSON_THROW_ON_ERROR);
+    
+        if (!isset($composerJson['name'])) {
+            throw new \UnexpectedValueException('No plugin name found in ' . __CLASS__ . '.');
+        }
+    
+        return $composerJson['name'];
     }
 
     private array $installedPackageNames = [];
-
     public function onPackageInstall(PackageEvent $event)
     {
         $operation = $event->getOperation();
