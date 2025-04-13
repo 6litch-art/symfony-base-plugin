@@ -27,7 +27,7 @@ final class FlysystemPluginHook extends Common\AbstractPluginHook
         $codeModifier->replaceInComments("no-internal", '@internal', '');
 
         $this->Print('Updating "./Lazy/LazyFactory.php" file. Remove `final` flag');
-        $codeModifier->replaceInComments("no-final", 'final', '');
+        $codeModifier->replace("no-final", 'final', '');
 
         $this->Print('Updating "./Lazy/LazyFactory.php" file. Turn `private` properties into `protected` properties');
         $codeModifier->replace("private-protected", 'private ', 'protected ');
