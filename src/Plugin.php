@@ -41,6 +41,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
     public function activate(Composer $composer, IOInterface $io)
     {
+        dump("AHHH");
         AbstractPluginHook::$io = $io;
     }
 
