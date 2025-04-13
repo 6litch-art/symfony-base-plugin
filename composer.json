@@ -13,12 +13,10 @@
   ],
   "require": {
     "php": "^8.0",
-    "composer-plugin-api": "^2.0",
-    "easycorp/easyadmin-bundle": "*",
-    "league/flysystem-bundle": "*"
+    "composer-plugin-api": "^2.*"
   },
   "require-dev": {
-    "composer/composer": "^2.0"
+    "composer/composer": "^2.*"
   },
   "autoload": {
     "psr-4": {
@@ -32,8 +30,5 @@
   },
   "extra": {
     "class": "Base\\Composer\\Plugin"
-  },
-  "scripts": {
-    "run-plugin": "Base\\Composer\\Plugin::onPackageInstall"
   }
 }
