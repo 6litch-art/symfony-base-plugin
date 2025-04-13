@@ -26,4 +26,10 @@ final class PolyfillPluginHook extends Common\AbstractPluginHook
         $codeModifier->erase("no-mbfirst", ['mb_ucfirst($string', 'mb_lcfirst($string']);
         $codeModifier->erase("no-array-any", ['array_any(array']);
     }
+
+    public function onPackageRemove(PackageEvent $event)
+    {
+        $codeModifier = new \CodeModifier($this->getBundleDir() . '/bootstrap.php', $this->getAuthor());
+        $codeModifier->restore();
+    }
 }

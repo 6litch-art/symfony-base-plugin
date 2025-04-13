@@ -29,4 +29,12 @@ final class PaypalPluginHook extends Common\AbstractPluginHook
         $codeModifier = new \CodeModifier($this->getBundleDir() . '/lib/PayPal/Transport/PayPalRestCall.php', $this->getAuthor());
         $codeModifier->replace("no-optional", '$handlers = array()', '$handlers');
     }
+
+    public function onPackageRemove(PackageEvent $event)
+    {
+        $codeModifier = new \CodeModifier($this->getBundleDir() . '/lib/PayPal/Transport/PayPalRestCall.php', $this->getAuthor());
+        $codeModifier->restore();
+        $codeModifier = new \CodeModifier($this->getBundleDir() . '/lib/PayPal/Common/PayPalModel.php', $this->getAuthor());
+        $codeModifier->restore();
+    }
 }

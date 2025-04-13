@@ -32,4 +32,10 @@ final class FlysystemPluginHook extends Common\AbstractPluginHook
         $this->Print('Updating "./Lazy/LazyFactory.php" file. Turn `private` properties into `protected` properties');
         $codeModifier->replace("private-protected", 'private ', 'protected ');
     }
+
+    public function onPackageRemove(PackageEvent $event)
+    {
+        $codeModifier = new \CodeModifier($this->getBundleDir() . '/src/Lazy/LazyFactory.php', $this->getAuthor());
+        $codeModifier->restore();
+    }
 }

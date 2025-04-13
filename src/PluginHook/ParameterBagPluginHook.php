@@ -25,4 +25,10 @@ final class ParameterBagPluginHook extends Common\AbstractPluginHook
         $codeModifier = new \CodeModifier($this->getBundleDir() . '/ParameterBag/FrozenParameterBag.php', $this->getAuthor());
         $codeModifier->replace("never-void", ': never', ': void ');
     }
+
+    public function onPackageRemove(PackageEvent $event)
+    {
+        $codeModifier = new \CodeModifier($this->getBundleDir() . '/ParameterBag/FrozenParameterBag.php', $this->getAuthor());
+        $codeModifier->restore();
+    }
 }

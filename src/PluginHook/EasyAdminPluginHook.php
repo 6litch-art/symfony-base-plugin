@@ -19,6 +19,15 @@ final class EasyAdminPluginHook extends Common\AbstractPluginHook
         return "*";
     }
 
+    public function onPackageRemove(PackageEvent $event)
+    {
+        $phpFiles = iterator_to_array($this->getBundlePHPFiles());
+        foreach ($phpFiles as $phpFile) {
+            $codeModifier = new \CodeModifier($phpFile, $this->getAuthor());
+            $codeModifier->restore();
+        }
+    }
+
     public function onPackageChange(PackageEvent $event)
     {
         $phpFiles = iterator_to_array($this->getBundlePHPFiles());
