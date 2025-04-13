@@ -73,7 +73,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
     {
         $operation = $event->getOperation();
         $packageName = $operation->getPackage()?->getName();
-        dump($packageName);
+        // dump($packageName);
 
         if (in_array($packageName, $this->installedPackageNames)) {
             return;
@@ -93,7 +93,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
                 continue;
             }
 
-            dump($class->getPackageName(), $this->getPackageName(), $packageName);
+            // dump($class->getPackageName(), $this->getPackageName(), $packageName);
             
             if (!InstalledVersions::isInstalled($class->getPackageName())) {
                 continue;
@@ -134,7 +134,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
                 continue;
             }
 
-            dump($class->getPackageName(), $this->getPackageName(), $packageName);
+            // dump($class->getPackageName(), $this->getPackageName(), $packageName);
             
             if (!InstalledVersions::isInstalled($class->getPackageName())) {
                 continue;
