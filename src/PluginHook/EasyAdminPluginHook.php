@@ -21,54 +21,55 @@ final class EasyAdminPluginHook extends Common\AbstractPluginHook
 
     public function onPackageChange(PackageEvent $event)
     {
-        $this->removeFinalFromAllClasses();
-        $this->removeSelfFromAllClasses();
-        $this->changePrivateToProtectedPropertiesFromAllClasses();
-        $this->changeNewSelfToNewStaticFromAllClasses();
-        $this->enableMultiWordSearch();
+        $phpFiles = $this->getBundlePHPFiles();
+        $this->removeFinalFromAllClasses($phpFiles);
+        $this->removeSelfFromAllClasses($phpFiles);
+        $this->changePrivateToProtectedPropertiesFromAllClasses($phpFiles);
+        $this->changeNewSelfToNewStaticFromAllClasses($phpFiles);
+        $this->enableMultiWordSearch($phpFiles);
     }
 
-    public function removeFinalFromAllClasses()
+    public function removeFinalFromAllClasses($phpFiles)
     {
         $this->Print('Updating all PHP files. Make classes `non-final`');
-        foreach ($this->getBundlePHPFiles() as $phpFile) {
+        foreach ($phpFiles as $phpFile) {
             $codeModifier = new \CodeModifier($phpFile, $this->getAuthor());
             $codeModifier->replace("non-final", 'final class ', 'class ');
         }
 
     }
 
-    public function removeSelfFromAllClasses()
+    public function removeSelfFromAllClasses($phpFiles)
     {
         $this->Print('Updating all PHP files. Remove all `self` requirements in class method returns');
-        foreach ($this->getBundlePHPFiles() as $phpFile) {
+        foreach ($phpFiles as $phpFile) {
             $codeModifier = new \CodeModifier($phpFile, $this->getAuthor());
             $codeModifier->replace("no-self", ['): self', '):self', ') :self'], ')');
         }
 
     }
 
-    public function changeNewSelfToNewStaticFromAllClasses()
+    public function changeNewSelfToNewStaticFromAllClasses($phpFiles)
     {
         $this->Print('Updating all PHP files. Change all `self` declarations to `static` declarations');
-        foreach ($this->getBundlePHPFiles() as $phpFile) {
+        foreach ($phpFiles as $phpFile) {
             $codeModifier = new \CodeModifier($phpFile, $this->getAuthor());           
             $codeModifier->replace("self-static", 'new self', 'new static');
         }
 
     }
 
-    public function changePrivateToProtectedPropertiesFromAllClasses()
+    public function changePrivateToProtectedPropertiesFromAllClasses($phpFiles)
     {
         $this->Print('Updating all PHP files. Turn `private` properties into `protected` properties');
-        foreach ($this->getBundlePHPFiles() as $phpFile) {
+        foreach ($phpFiles as $phpFile) {
             $codeModifier = new \CodeModifier($phpFile, $this->getAuthor());
             $codeModifier->replace("private-protected", 'private ', 'protected ');
         }
 
     }
 
-    public function enableMultiWordSearch()
+    public function enableMultiWordSearch($phpFiles)
     {
         $this->Print('Updating `./Orm/EntityRepository.php` file. Allow multi word search in CRUD controllers.');
         $codeModifier = new \CodeModifier($this->getBundleDir() . '/src/Orm/EntityRepository.php', $this->getAuthor());
