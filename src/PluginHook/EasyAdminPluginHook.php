@@ -21,7 +21,7 @@ final class EasyAdminPluginHook extends Common\AbstractPluginHook
 
     public function onPackageChange(PackageEvent $event)
     {
-        $phpFiles = $this->getBundlePHPFiles();
+        $phpFiles = iterator_to_array($this->getBundlePHPFiles());
         $this->removeFinalFromAllClasses($phpFiles);
         $this->removeSelfFromAllClasses($phpFiles);
         $this->changePrivateToProtectedPropertiesFromAllClasses($phpFiles);
