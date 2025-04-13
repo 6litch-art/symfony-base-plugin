@@ -32,5 +32,8 @@
   },
   "extra": {
     "class": "Base\\Composer\\Plugin"
+  },
+  "scripts": {
+    "run-plugin": "Base\\Composer\\Plugin::onPackageInstall"
   }
 }
