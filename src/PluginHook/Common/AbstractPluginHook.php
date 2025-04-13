@@ -27,7 +27,6 @@ abstract class AbstractPluginHook implements PluginHookInterface
      */
     public function onPackageChange(PackageEvent $event)
     {
-        dump(1);
         $methodName = explode("::", __METHOD__);
         $methodName = last($methodName);
         throw new \UnexpectedValueException('Please override ' . static::class . '::' . $methodName);
@@ -39,7 +38,6 @@ abstract class AbstractPluginHook implements PluginHookInterface
      */
     public function onPackageInstall(PackageEvent $event)
     {
-        dump(1);
         $this->onPackageChange($event);
     }
 
@@ -49,7 +47,6 @@ abstract class AbstractPluginHook implements PluginHookInterface
      */
     public function onPackageUpdate(PackageEvent $event)
     {
-        dump(1);
         $this->onPackageChange($event);
     }
 

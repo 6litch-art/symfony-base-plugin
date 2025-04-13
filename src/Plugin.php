@@ -50,6 +50,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
     public function uninstall(Composer $composer, IOInterface $io)
     {
+        // @todo: restore .bak before removing plugins..
     }
 
     private function getPluginName(): string
