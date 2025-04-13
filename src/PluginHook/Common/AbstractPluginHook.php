@@ -27,6 +27,7 @@ abstract class AbstractPluginHook implements PluginHookInterface
      */
     public function onPackageChange(PackageEvent $event)
     {
+        dump(1);
         $methodName = explode("::", __METHOD__);
         $methodName = last($methodName);
         throw new \UnexpectedValueException('Please override ' . static::class . '::' . $methodName);
@@ -38,6 +39,7 @@ abstract class AbstractPluginHook implements PluginHookInterface
      */
     public function onPackageInstall(PackageEvent $event)
     {
+        dump(1);
         $this->onPackageChange($event);
     }
 
@@ -47,6 +49,7 @@ abstract class AbstractPluginHook implements PluginHookInterface
      */
     public function onPackageUpdate(PackageEvent $event)
     {
+        dump(1);
         $this->onPackageChange($event);
     }
 
@@ -112,25 +115,13 @@ abstract class AbstractPluginHook implements PluginHookInterface
 
     protected function getBundlePHPFiles(): iterable
     {
-        $bundleDir = $this->getBundleDir();
-    
-        if (!is_dir($bundleDir)) {
-            return;
-        }
-    
-        try {
-            $directoryIterator = new \RecursiveDirectoryIterator($bundleDir, \FilesystemIterator::SKIP_DOTS);
-        } catch (\UnexpectedValueException $e) {
-            dump($e);
-            $directoryIterator = new \RecursiveDirectoryIterator($bundleDir, \FilesystemIterator::SKIP_DOTS);
-        }
-    
-        $iterator = new \RecursiveIteratorIterator($directoryIterator);
-    
-        foreach ($iterator as $fileInfo) {
-            if ($fileInfo->isFile() && str_ends_with($fileInfo->getFilename(), '.php')) {
-                yield $fileInfo->getPathname();
+        $iterator = new \RecursiveDirectoryIterator($this->getBundleDir(), \FilesystemIterator::SKIP_DOTS);
+        foreach (new \RecursiveIteratorIterator($iterator) as $filePath) {
+            if (is_dir($filePath) || !str_ends_with($filePath, '.php')) {
+                continue;
             }
+
+            yield $filePath;
         }
     }
 }
