@@ -94,6 +94,9 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
             if (!InstalledVersions::isInstalled($class->getPackageName())) {
                 continue;
             }
+
+            dump($class->getPackageName(), $this->getPackageName(), $packageName);
+            
             if ($class->getPackageName() != $packageName && $this->getPackageName() != $packageName) {
                 continue;
             }
