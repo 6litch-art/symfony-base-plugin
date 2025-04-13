@@ -253,13 +253,21 @@ if (!class_exists("CodeModifier")) {
             
             // Collect the yielded content from the generator function
             $iterator = $fn($tag, $search, $subject, ...$args);
+            echo "-----";
             print_r($tag);
+            echo "-----";
             print_r($search);
+            echo "-----";
             print_r($subject);
+            echo "-----";
             print_r($fn);
+            echo "-----";
             print_r($args);
+            echo "-----";
+            print_r($iterator);
+            echo "-----";
             $generatedContent = $iterator ? iterator_to_array($iterator) : [];
-
+            print_r($generatedContent);
             // If no modification has been made (i.e., the generator yields the same content)
             if (implode(PHP_EOL, $generatedContent) === $subject) {
                 // No modification, return the original content unchanged
