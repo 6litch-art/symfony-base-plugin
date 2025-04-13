@@ -112,11 +112,18 @@ abstract class AbstractPluginHook implements PluginHookInterface
 
     protected function getBundlePHPFiles(): iterable
     {
-        foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->getBundleDir(), \FilesystemIterator::SKIP_DOTS)) as $filePath) {
+        $bundleDir = $this->getBundleDir();
+    
+        if (!is_dir($bundleDir)) {
+            echo "ERROR $bundleDir not found..";
+            return;
+        }
+    
+        foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($bundleDir, \FilesystemIterator::SKIP_DOTS)) as $filePath) {
             if (is_dir($filePath) || !str_ends_with($filePath, '.php')) {
                 continue;
             }
-
+    
             yield $filePath;
         }
     }

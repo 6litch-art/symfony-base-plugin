@@ -41,7 +41,6 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
     public function activate(Composer $composer, IOInterface $io)
     {
-        echo 1;
         AbstractPluginHook::$io = $io;
     }
 
@@ -74,8 +73,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
     {
         $operation = $event->getOperation();
         $packageName = $operation->getPackage()?->getName();
-        // dump($packageName);
-
+        
         if (in_array($packageName, $this->installedPackageNames)) {
             return;
         }
@@ -93,9 +91,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
             } catch (\Error $e) {
                 continue;
             }
-
-            // dump($class->getPackageName(), $this->getPackageName(), $packageName);
-            
+ 
             if (!InstalledVersions::isInstalled($class->getPackageName())) {
                 continue;
             }
@@ -135,8 +131,6 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
                 continue;
             }
 
-            // dump($class->getPackageName(), $this->getPackageName(), $packageName);
-            
             if (!InstalledVersions::isInstalled($class->getPackageName())) {
                 continue;
             }
