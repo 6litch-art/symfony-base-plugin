@@ -114,19 +114,23 @@ abstract class AbstractPluginHook implements PluginHookInterface
     {
         $bundleDir = $this->getBundleDir();
     
-        echo 1;
         if (!is_dir($bundleDir)) {
-            echo 2;
-            dump("ERROR $bundleDir not found..");
+            return;
         }
     
-        echo 3;
-        foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($bundleDir, \FilesystemIterator::SKIP_DOTS)) as $filePath) {
-            if (is_dir($filePath) || !str_ends_with($filePath, '.php')) {
-                continue;
-            }
+        try {
+            $directoryIterator = new \RecursiveDirectoryIterator($bundleDir, \FilesystemIterator::SKIP_DOTS);
+        } catch (\UnexpectedValueException $e) {
+            dump($e);
+            $directoryIterator = new \RecursiveDirectoryIterator($bundleDir, \FilesystemIterator::SKIP_DOTS);
+        }
     
-            yield $filePath;
+        $iterator = new \RecursiveIteratorIterator($directoryIterator);
+    
+        foreach ($iterator as $fileInfo) {
+            if ($fileInfo->isFile() && str_ends_with($fileInfo->getFilename(), '.php')) {
+                yield $fileInfo->getPathname();
+            }
         }
     }
 }
