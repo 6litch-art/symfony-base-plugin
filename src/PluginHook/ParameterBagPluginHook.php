@@ -14,6 +14,11 @@ final class ParameterBagPluginHook extends Common\AbstractPluginHook
         return 'symfony/dependency-injection';
     }
 
+    public function getPackageRequirements(): string
+    {
+        return "*";
+    }
+
     public function onPackageChange(PackageEvent $event)
     {
         $this->Print('Updating "FrozenBagContainer.php" file. Turn returned values less restrictive using (void)');

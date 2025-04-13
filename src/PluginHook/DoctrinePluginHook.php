@@ -14,6 +14,11 @@ final class DoctrinePluginHook extends Common\AbstractPluginHook
         return 'doctrine/orm';
     }
 
+    public function getPackageRequirements(): string
+    {
+        return "*";
+    }
+
     public function onPackageChange(PackageEvent $event)
     {
         $codeModifier = new \CodeModifier($this->getBundleDir() . '/src/Internal/Hydration/ObjectHydrator.php', $this->getAuthor());

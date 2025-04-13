@@ -14,6 +14,11 @@ final class EasyAdminPluginHook extends Common\AbstractPluginHook
         return 'easycorp/easyadmin-bundle';
     }
 
+    public function getPackageRequirements(): string
+    {
+        return "*";
+    }
+
     public function onPackageChange(PackageEvent $event)
     {
         $this->removeFinalFromAllClasses();

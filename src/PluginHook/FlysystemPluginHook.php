@@ -14,12 +14,20 @@ final class FlysystemPluginHook extends Common\AbstractPluginHook
         return 'league/flysystem-bundle';
     }
 
+    public function getPackageRequirements(): string
+    {
+        return "*";
+    }
+
     public function onPackageChange(PackageEvent $event)
     {
         $codeModifier = new \CodeModifier($this->getBundleDir() . '/src/Lazy/LazyFactory.php', $this->getAuthor());
 
         $this->Print('Updating "./Lazy/LazyFactory.php" file. Remove `@internal` flag');
         $codeModifier->replaceInComments("no-internal", '@internal', '');
+
+        $this->Print('Updating "./Lazy/LazyFactory.php" file. Remove `final` flag');
+        $codeModifier->replaceInComments("no-final", 'final', '');
 
         $this->Print('Updating "./Lazy/LazyFactory.php" file. Turn `private` properties into `protected` properties');
         $codeModifier->replace("private-protected", 'private ', 'protected ');

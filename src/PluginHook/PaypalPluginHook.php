@@ -14,6 +14,11 @@ final class PaypalPluginHook extends Common\AbstractPluginHook
         return 'paypal/rest-api-sdk-php';
     }
 
+    public function getPackageRequirements(): string
+    {
+        return "*";
+    }
+
     public function onPackageChange(PackageEvent $event)
     {
         $this->Print('Updating "./lib/PayPal/Common/PayPalModel.php" file. `Check is_array($v)` first');
