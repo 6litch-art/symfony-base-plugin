@@ -1,13 +1,14 @@
 <?php
 
-namespace Base\Composer\PluginHook;
+namespace Base\Composer\PackageHook;
 
+use Base\Composer\Package\AbstractHook;
 use Composer\Installer\PackageEvent;
 
 /**
  *
  */
-final class FlysystemPluginHook extends Common\AbstractPluginHook
+final class FlysystemPackageHook extends AbstractHook
 {
     public function getPackageName(): string
     {

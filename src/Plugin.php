@@ -1,7 +1,9 @@
 <?php
 
 namespace Base\Composer;
-use Base\Composer\PluginHook\Common\AbstractPluginHook;
+
+use Base\Composer\Package\AbstractHook;
+use Base\Composer\Package\HookInterface;
 
 use Composer\Autoload\ClassMapGenerator;
 use Composer\Composer;
@@ -44,7 +46,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
     public function activate(Composer $composer, IOInterface $io)
     {
-        AbstractPluginHook::$io = $io;
+        AbstractHook::$io = $io;
     }
 
     public function deactivate(Composer $composer, IOInterface $io)
@@ -86,7 +88,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
         foreach (ClassMapGenerator::createMap(__DIR__) as $className => $_) {
 
-            if (!in_array(PluginHookInterface::class, class_implements($className))) {
+            if (!in_array(HookInterface::class, class_implements($className))) {
                 continue;
             }
 
@@ -125,7 +127,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
         foreach (ClassMapGenerator::createMap(__DIR__) as $className => $_) {
 
-            if (!in_array(PluginHookInterface::class, class_implements($className))) {
+            if (!in_array(HookInterface::class, class_implements($className))) {
                 continue;
             }
 
@@ -165,7 +167,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
         foreach (ClassMapGenerator::createMap(__DIR__) as $className => $_) {
 
-            if (!in_array(PluginHookInterface::class, class_implements($className))) {
+            if (!in_array(HookInterface::class, class_implements($className))) {
                 continue;
             }
 
@@ -188,17 +190,11 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
             $class->onPackageRemove($event);
         }
     }
-    
+
     public function onPreAutoloadDump(ScriptEvent $event)
     {
         $io = $event->getIO();
         $stubScript = __DIR__ . '/../../stubs.php';
 
-        if (file_exists($stubScript)) {
-            $io->write("<info>[BasePlugin] Generating stubs...</info>");
-            // passthru("php " . escapeshellarg($stubScript));
-        } else {
-            $io->writeError("<error>[BasePlugin] Stub generator not found at $stubScript</error>");
-        }
     }
 }

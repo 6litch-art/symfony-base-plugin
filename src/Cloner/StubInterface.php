@@ -1,13 +1,13 @@
 <?php
 
-namespace Base\Composer;
+namespace Base\Composer\Package;
 
 use Composer\Installer\PackageEvent;
 
 /**
  *
  */
-interface PluginHookInterface
+interface HookInterface
 {
     public function getPackageName(): string;
     public function getPackageVersion(PackageEvent $event): string;

@@ -1,7 +1,7 @@
 <?php
 
-namespace Base\Composer\PluginHook\Common;
-use Base\Composer\PluginHookInterface;
+namespace Base\Composer\Package;
+use Base\Composer\Package\HookInterface;
 
 use Composer\Factory;
 use Composer\Installer\PackageEvent;
@@ -12,7 +12,7 @@ use Composer\DependencyResolver\Operation\UpdateOperation;
 /**
  *
  */
-abstract class AbstractPluginHook implements PluginHookInterface
+abstract class AbstractHook implements HookInterface
 {
     public static IOInterface $io;
 

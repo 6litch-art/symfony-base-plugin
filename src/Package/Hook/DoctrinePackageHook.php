@@ -1,13 +1,14 @@
 <?php
 
-namespace Base\Composer\PluginHook;
+namespace Base\Composer\Package\Hook;
 
+use Base\Composer\Package\AbstractHook;
 use Composer\Installer\PackageEvent;
 
 /**
  *
  */
-final class DoctrinePluginHook extends Common\AbstractPluginHook
+final class DoctrinePackageHook extends AbstractHook
 {
     public function getPackageName(): string
     {
