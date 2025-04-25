@@ -30,5 +30,10 @@
   },
   "extra": {
     "class": "Base\\Composer\\Plugin"
+  },
+  "scripts": {
+    "pre-autoload-dump": [
+      "php stubs.php"
+    ]
   }
 }
