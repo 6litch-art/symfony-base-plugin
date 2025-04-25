@@ -11,6 +11,8 @@ use Composer\Installer\PackageEvent;
 use Composer\Installer\PackageEvents;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
+use Composer\Script\Event as ScriptEvent;
+use Composer\Script\ScriptEvents;
 
 include_once dirname(__FILE__) . '/../bootstrap.php';
 
@@ -33,9 +35,10 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            PackageEvents::POST_PACKAGE_INSTALL => 'onPackageInstall',
-            PackageEvents::POST_PACKAGE_UPDATE => 'onPackageUpdate',
-            PackageEvents::PRE_PACKAGE_UNINSTALL => 'onPackageRemove'
+            PackageEvents::POST_PACKAGE_INSTALL  => 'onPackageInstall',
+            PackageEvents::POST_PACKAGE_UPDATE   => 'onPackageUpdate',
+            PackageEvents::PRE_PACKAGE_UNINSTALL => 'onPackageRemove',
+            ScriptEvents::PRE_AUTOLOAD_DUMP      => "onPreAutoloadDump"
         ];
     }
 
@@ -183,6 +186,19 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
             }
 
             $class->onPackageRemove($event);
+        }
+    }
+    
+    public function onPreAutoloadDump(ScriptEvent $event)
+    {
+        $io = $event->getIO();
+        $stubScript = __DIR__ . '/../../stubs.php';
+
+        if (file_exists($stubScript)) {
+            $io->write("<info>[BasePlugin] Generating stubs...</info>");
+            // passthru("php " . escapeshellarg($stubScript));
+        } else {
+            $io->writeError("<error>[BasePlugin] Stub generator not found at $stubScript</error>");
         }
     }
 }
