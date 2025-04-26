@@ -23,7 +23,7 @@ abstract class AbstractStub implements StubInterface
         $shortOutputNamespace = strlen($outputNamespace) > $displayLimit-3 ? substr($outputNamespace, 0, $displayLimit-5) . '...' : $outputNamespace;
         
         $prefix = sprintf(
-            "    * \033[0;35mAliasing namespace \033[0;33m%-".$displayLimit."s\033[0;35m to\033[0;33m %-".$displayLimit."s\033[0m.. %s",
+            "    *Aliasing  \033[0;35m%-".$displayLimit."s\033[0m to\033[0;35m %-".$displayLimit."s\033[0m.. %s",
             "\"".$shortInputNamespace."\"",
             "\"".$shortOutputNamespace."\"",
             $msg

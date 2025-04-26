@@ -42,7 +42,7 @@ final class EasyAdminPackageHook extends AbstractHook
 
     public function removeFinalFromAllClasses($phpFiles)
     {
-        $this->print('Updating all PHP files. Make classes `non-final`');
+        $this->print('Make classes `non-final` in all PHP files.');
         foreach ($phpFiles as $phpFile) {
             $codeModifier = new CodeModifier($phpFile, $this->getAuthor());
             $codeModifier->replace("non-final", 'final class ', 'class ');
@@ -52,7 +52,7 @@ final class EasyAdminPackageHook extends AbstractHook
 
     public function removeSelfFromAllClasses($phpFiles)
     {
-        $this->print('Updating all PHP files. Remove all `self` requirements in class method returns');
+        $this->print('Remove all `self` requirements in class method returns in all PHP files.');
         foreach ($phpFiles as $phpFile) {
             $codeModifier = new CodeModifier($phpFile, $this->getAuthor());
             $codeModifier->replace("no-self", ['): self', '):self', ') :self'], ')');
