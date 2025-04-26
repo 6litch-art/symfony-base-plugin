@@ -4,6 +4,7 @@ namespace Base\Composer\Package\Hook;
 
 use Base\Composer\Package\AbstractHook;
 use Composer\Installer\PackageEvent;
+use Base\Composer\CodeModifier;
 
 /**
  *
@@ -22,7 +23,7 @@ final class FlysystemPackageHook extends AbstractHook
 
     public function onPackageChange(PackageEvent $event)
     {
-        $codeModifier = new \CodeModifier($this->getBundleDir() . '/src/Lazy/LazyFactory.php', $this->getAuthor());
+        $codeModifier = new CodeModifier($this->getBundleDir() . '/src/Lazy/LazyFactory.php', $this->getAuthor());
 
         $this->Print('Updating "./Lazy/LazyFactory.php" file. Remove `@internal` flag');
         $codeModifier->replaceInComments("no-internal", '@internal', '');
@@ -36,7 +37,7 @@ final class FlysystemPackageHook extends AbstractHook
 
     public function onPackageRemove(PackageEvent $event)
     {
-        $codeModifier = new \CodeModifier($this->getBundleDir() . '/src/Lazy/LazyFactory.php', $this->getAuthor());
+        $codeModifier = new CodeModifier($this->getBundleDir() . '/src/Lazy/LazyFactory.php', $this->getAuthor());
         $codeModifier->restore();
     }
 }

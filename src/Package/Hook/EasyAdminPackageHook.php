@@ -4,6 +4,7 @@ namespace Base\Composer\Package\Hook;
 
 use Base\Composer\Package\AbstractHook;
 use Composer\Installer\PackageEvent;
+use Base\Composer\CodeModifier;
 
 /**
  *
@@ -24,7 +25,7 @@ final class EasyAdminPackageHook extends AbstractHook
     {
         $phpFiles = iterator_to_array($this->getBundlePHPFiles());
         foreach ($phpFiles as $phpFile) {
-            $codeModifier = new \CodeModifier($phpFile, $this->getAuthor());
+            $codeModifier = new CodeModifier($phpFile, $this->getAuthor());
             $codeModifier->restore();
         }
     }
@@ -43,7 +44,7 @@ final class EasyAdminPackageHook extends AbstractHook
     {
         $this->Print('Updating all PHP files. Make classes `non-final`');
         foreach ($phpFiles as $phpFile) {
-            $codeModifier = new \CodeModifier($phpFile, $this->getAuthor());
+            $codeModifier = new CodeModifier($phpFile, $this->getAuthor());
             $codeModifier->replace("non-final", 'final class ', 'class ');
         }
 
@@ -53,7 +54,7 @@ final class EasyAdminPackageHook extends AbstractHook
     {
         $this->Print('Updating all PHP files. Remove all `self` requirements in class method returns');
         foreach ($phpFiles as $phpFile) {
-            $codeModifier = new \CodeModifier($phpFile, $this->getAuthor());
+            $codeModifier = new CodeModifier($phpFile, $this->getAuthor());
             $codeModifier->replace("no-self", ['): self', '):self', ') :self'], ')');
         }
 
@@ -63,7 +64,7 @@ final class EasyAdminPackageHook extends AbstractHook
     {
         $this->Print('Updating all PHP files. Change all `self` declarations to `static` declarations');
         foreach ($phpFiles as $phpFile) {
-            $codeModifier = new \CodeModifier($phpFile, $this->getAuthor());           
+            $codeModifier = new CodeModifier($phpFile, $this->getAuthor());           
             $codeModifier->replace("self-static", 'new self', 'new static');
         }
 
@@ -73,7 +74,7 @@ final class EasyAdminPackageHook extends AbstractHook
     {
         $this->Print('Updating all PHP files. Turn `private` properties into `protected` properties');
         foreach ($phpFiles as $phpFile) {
-            $codeModifier = new \CodeModifier($phpFile, $this->getAuthor());
+            $codeModifier = new CodeModifier($phpFile, $this->getAuthor());
             $codeModifier->replace("private-protected", 'private ', 'protected ');
         }
 
@@ -82,7 +83,7 @@ final class EasyAdminPackageHook extends AbstractHook
     public function enableMultiWordSearch($phpFiles)
     {
         $this->Print('Updating `./Orm/EntityRepository.php` file. Allow multi word search in CRUD controllers.');
-        $codeModifier = new \CodeModifier($this->getBundleDir() . '/src/Orm/EntityRepository.php', $this->getAuthor());
+        $codeModifier = new CodeModifier($this->getBundleDir() . '/src/Orm/EntityRepository.php', $this->getAuthor());
         $codeModifier->replace("multiword-fix", "'%'.\$lowercaseQuery.'%'", "'%'.str_replace(' ', '%', \$lowercaseQuery).'%'");
     }
 }

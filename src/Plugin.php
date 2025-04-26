@@ -5,7 +5,7 @@ namespace Base\Composer;
 use Base\Composer\Package\AbstractHook;
 use Base\Composer\Package\HookInterface;
 
-use Composer\Autoload\ClassMapGenerator;
+use Composer\ClassMapGenerator\ClassMapGenerator;
 use Composer\Composer;
 use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\InstalledVersions;
@@ -15,8 +15,6 @@ use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
 use Composer\Script\Event as ScriptEvent;
 use Composer\Script\ScriptEvents;
-
-include_once dirname(__FILE__) . '/../bootstrap.php';
 
 /**
  *
@@ -79,7 +77,6 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
     {
         $operation = $event->getOperation();
         $packageName = $operation->getPackage()?->getName();
-        
         if (in_array($packageName, $this->installedPackageNames)) {
             return;
         }
@@ -124,7 +121,6 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
         }
 
         $this->updatedPackageNames[] = $packageName;
-
         foreach (ClassMapGenerator::createMap(__DIR__) as $className => $_) {
 
             if (!in_array(HookInterface::class, class_implements($className))) {
@@ -195,6 +191,6 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
     {
         $io = $event->getIO();
         $stubScript = __DIR__ . '/../../stubs.php';
-
+        
     }
 }
