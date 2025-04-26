@@ -2,6 +2,7 @@
 
 namespace Base\Composer;
 
+use Base\Composer\Cloner\StubInterface;
 use Base\Composer\Package\AbstractHook;
 use Base\Composer\Package\HookInterface;
 
@@ -42,9 +43,10 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
         ];
     }
 
+    protected IOInterface $io;
     public function activate(Composer $composer, IOInterface $io)
     {
-        AbstractHook::$io = $io;
+        $this->io = $io;
     }
 
     public function deactivate(Composer $composer, IOInterface $io)
@@ -90,7 +92,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
             }
 
             try {
-                $class = new $className();
+                $class = new $className($this->io);
             } catch (\Error $e) {
                 continue;
             }
@@ -128,7 +130,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
             }
 
             try {
-                $class = new $className();
+                $class = new $className($this->io);
             } catch (\Error $e) {
                 continue;
             }
@@ -168,7 +170,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
             }
 
             try {
-                $class = new $className();
+                $class = new $className($this->io);
             } catch (\Error $e) {
                 continue;
             }
@@ -190,7 +192,21 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
     public function onPreAutoloadDump(ScriptEvent $event)
     {
         $io = $event->getIO();
-        $stubScript = __DIR__ . '/../../stubs.php';
-        
+        foreach (ClassMapGenerator::createMap(__DIR__) as $className => $_) {
+
+            if (!in_array(StubInterface::class, class_implements($className))) {
+                continue;
+            }
+
+            try {
+                $class = new $className($io);
+            } catch (\Error $e) {
+                continue;
+            }
+
+            $class->generate();
+        }
+
+        $io->write("\033[32mStubbing generation finished.\033[0m");
     }
 }

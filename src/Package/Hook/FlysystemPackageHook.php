@@ -25,13 +25,13 @@ final class FlysystemPackageHook extends AbstractHook
     {
         $codeModifier = new CodeModifier($this->getBundleDir() . '/src/Lazy/LazyFactory.php', $this->getAuthor());
 
-        $this->Print('Updating "./Lazy/LazyFactory.php" file. Remove `@internal` flag');
+        $this->print('Updating "./Lazy/LazyFactory.php" file. Remove `@internal` flag');
         $codeModifier->replaceInComments("no-internal", '@internal', '');
 
-        $this->Print('Updating "./Lazy/LazyFactory.php" file. Remove `final` flag');
+        $this->print('Updating "./Lazy/LazyFactory.php" file. Remove `final` flag');
         $codeModifier->replace("no-final", 'final', '');
 
-        $this->Print('Updating "./Lazy/LazyFactory.php" file. Turn `private` properties into `protected` properties');
+        $this->print('Updating "./Lazy/LazyFactory.php" file. Turn `private` properties into `protected` properties');
         $codeModifier->replace("private-protected", 'private ', 'protected ');
     }
 

@@ -14,11 +14,16 @@ use Composer\DependencyResolver\Operation\UpdateOperation;
  */
 abstract class AbstractHook implements HookInterface
 {
-    public static IOInterface $io;
+    public IOInterface $io;
 
-    public function Print(string $msg)
+    public function __construct(IOInterface $io)
     {
-        self::$io->write("    \033[0;35m* " . $this->getPackageName() . " <- " . $this->getAuthor() . "\033[0m " . $msg);
+        $this->io = $io;
+    }
+
+    public function print(string $msg)
+    {
+        $this->io->write("    \033[0;35m* " . $this->getPackageName() . " <- " . $this->getAuthor() . "\033[0m " . $msg);
     }
 
     /**

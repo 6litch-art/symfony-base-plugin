@@ -1,21 +1,13 @@
 <?php
 
-namespace Base\Composer\Package;
+namespace Base\Composer\Cloner;
 
-use Composer\Installer\PackageEvent;
-
-/**
- *
- */
-interface HookInterface
+interface StubInterface
 {
-    public function getPackageName(): string;
-    public function getPackageVersion(PackageEvent $event): string;
-    public function getPackageRequirements(): string;
+    public function getStubName(): string;
+    public function getStubPath(): string;
+    public function getStubInputNamespace(): string;
+    public function getStubOutputNamespace(): string;
 
-    public function onPackageChange(PackageEvent $event);
-    public function onPackageInstall(PackageEvent $event);
-    public function onPackageUpdate(PackageEvent $event);
-
-    public function onPackageRemove(PackageEvent $event);
+    public function generate();
 }
