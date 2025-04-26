@@ -25,7 +25,7 @@ final class HWIOPackageHook extends AbstractHook
     {
         $codeModifier = new CodeModifier($this->getBundleDir() . '/src/DependencyInjection/HWIOAuthExtension.php', $this->getAuthor());
 
-        $this->print('Updating "./HWIOAuthExtension.php" file. Fix DI Extension.');
+        $this->print('Fix DI Extension in `./HWIOAuthExtension.php`.');
         $codeModifier->replace("di-extension", 'Symfony\Component\HttpKernel\DependencyInjection\Extension', 'Symfony\Component\DependencyInjection\Extension\Extension');
     }
 

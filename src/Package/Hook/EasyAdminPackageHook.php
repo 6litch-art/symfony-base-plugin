@@ -62,7 +62,7 @@ final class EasyAdminPackageHook extends AbstractHook
 
     public function changeNewSelfToNewStaticFromAllClasses($phpFiles)
     {
-        $this->print('Updating all PHP files. Change all `self` declarations to `static` declarations');
+        $this->print('Change all `self` declarations to `static` declarations in all PHP files.');
         foreach ($phpFiles as $phpFile) {
             $codeModifier = new CodeModifier($phpFile, $this->getAuthor());           
             $codeModifier->replace("self-static", 'new self', 'new static');
@@ -72,7 +72,7 @@ final class EasyAdminPackageHook extends AbstractHook
 
     public function changePrivateToProtectedPropertiesFromAllClasses($phpFiles)
     {
-        $this->print('Updating all PHP files. Turn `private` properties into `protected` properties');
+        $this->print('Turn `private` properties into `protected` properties in all PHP files.');
         foreach ($phpFiles as $phpFile) {
             $codeModifier = new CodeModifier($phpFile, $this->getAuthor());
             $codeModifier->replace("private-protected", 'private ', 'protected ');
@@ -82,7 +82,7 @@ final class EasyAdminPackageHook extends AbstractHook
 
     public function enableMultiWordSearch($phpFiles)
     {
-        $this->print('Updating `./Orm/EntityRepository.php` file. Allow multi word search in CRUD controllers.');
+        $this->print('Allow multi word search in CRUD controllers in `./Orm/EntityRepository.php`.');
         $codeModifier = new CodeModifier($this->getBundleDir() . '/src/Orm/EntityRepository.php', $this->getAuthor());
         $codeModifier->replace("multiword-fix", "'%'.\$lowercaseQuery.'%'", "'%'.str_replace(' ', '%', \$lowercaseQuery).'%'");
     }

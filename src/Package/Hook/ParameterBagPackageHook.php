@@ -23,7 +23,7 @@ final class ParameterBagPackageHook  extends AbstractHook
 
     public function onPackageChange(PackageEvent $event)
     {
-        $this->print('Updating "FrozenBagContainer.php" file. Turn returned values less restrictive using (void)');
+        $this->print('Turn returned values less restrictive using (void) in `FrozenBagContainer.php`.');
         $codeModifier = new CodeModifier($this->getBundleDir() . '/ParameterBag/FrozenParameterBag.php', $this->getAuthor());
         $codeModifier->replace("never-void", ': never', ': void ');
     }

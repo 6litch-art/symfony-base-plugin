@@ -23,7 +23,7 @@ final class PolyfillPackageHook extends AbstractHook
 
     public function onPackageChange(PackageEvent $event)
     {
-        $this->print('Updating "bootstrap.php" file. Removing string restricted implementation of `mb_[u|l]cfirst()` due to conflict.');
+        $this->print('Removing string restricted implementation of `mb_[u|l]cfirst()` in `bootstrap.php`.');
         $codeModifier = new CodeModifier($this->getBundleDir() . '/bootstrap.php', $this->getAuthor());
         $codeModifier->erase("no-mbfirst", ['mb_ucfirst($string', 'mb_lcfirst($string']);
         $codeModifier->erase("no-array-any", ['array_any(array']);
