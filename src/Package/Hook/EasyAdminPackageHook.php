@@ -1,6 +1,6 @@
 <?php
 
-namespace Base\Composer\PackageHook;
+namespace Base\Composer\Package\Hook;
 
 use Base\Composer\Package\AbstractHook;
 use Composer\Installer\PackageEvent;

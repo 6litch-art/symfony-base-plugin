@@ -1,6 +1,6 @@
 <?php
 
-namespace Base\Composer\PackageHook;
+namespace Base\Composer\Package\Hook;
 
 use Base\Composer\Package\AbstractHook;
 use Composer\Installer\PackageEvent;
@@ -9,6 +9,7 @@ use Composer\Installer\PackageEvent;
  *
  */
 final class ParameterBagPackageHook  extends AbstractHook
+{
     public function getPackageName(): string
     {
         return 'symfony/dependency-injection';
