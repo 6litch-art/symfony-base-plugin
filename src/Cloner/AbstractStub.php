@@ -32,6 +32,11 @@ abstract class AbstractStub implements StubInterface
         $this->io->write($prefix);
     }
 
+    public function getAppPath(): string
+    {
+        return dirname(__FILE__, 6) . "/src/".$this->getStubName();
+    }
+
     public function getStubName(): string
     {
         return preg_replace('/Stub$/', '', basename(str_replace('\\', '/', get_class($this))));
@@ -39,7 +44,7 @@ abstract class AbstractStub implements StubInterface
 
     public function getStubPath(): string
     {
-        return dirname(__FILE__, 6) . "/stubs/".$this->getStubName();
+        return dirname(__FILE__, 3) . "/stubs/".$this->getStubName();
     }
 
     public function getStubInputNamespace(): string
@@ -52,10 +57,16 @@ abstract class AbstractStub implements StubInterface
         return "App\\".str_replace("/", "\\", $this->getStubName())."\\";
     }
 
+    public function getClassName(string $classFile): string
+    {
+        return basename($classFile, '.php');
+    }
+
     public function getClassPath(): string
     {
         return dirname(__FILE__, 4) . "/base-bundle/src/".$this->getStubName();
     }
+
     public function getClassFiles(): array
     {
         $locationPath = $this->getClassPath();
@@ -69,7 +80,7 @@ abstract class AbstractStub implements StubInterface
         foreach ($iterator as $file) {
             if ($file->isFile() && $file->getExtension() === 'php') {
 
-                $fqcn = $this->getStubInputNamespace().$this->getClassNamespace($file).$this->getClassName($file);
+                $fqcn = $this->getNamespace($file)."\\".$this->getClassName($file);
                 $relativePath = str_replace($locationPath . DIRECTORY_SEPARATOR, '', $file);
                 $classes[$fqcn] = $relativePath;                
             }
@@ -77,49 +88,141 @@ abstract class AbstractStub implements StubInterface
 
         return $classes;
     }
-    
-    public function getClassNamespace(string $classFile): string
-    {
-        $lines = file($classFile);
-        $array = preg_grep('/^namespace /', $lines);
-        $namespace = array_shift($array);
 
-        $match = [];
-        $prefix = $this->getStubInputNamespace();
-        if (preg_match('/^namespace (\\\\?)' . addslashes($prefix) . '(\\\\?)(.*);$/', $namespace, $match)) {
-            $array = array_pop($match);
-            if (!empty($array)) {
-                return $array . "\\";
+    public function getNamespace(string $classFile): string
+    {
+        if (!file_exists($classFile)) {
+            return '';
+        }
+    
+        $lines = file($classFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        foreach ($lines as $line) {
+            if (preg_match('/^namespace\s+([^;]+);/', $line, $matches)) {
+                return trim($matches[1]);
+            }
+        }
+    
+        return '';
+    }
+
+    public function isTrait(string $classFile): bool
+    {
+        if (!file_exists($classFile)) {
+            return false;
+        }
+
+        $lines = file($classFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        foreach ($lines as $line) {
+            if (preg_match('/^\s*trait\s+\w+/', $line)) {
+                return true;
             }
         }
 
-        return "";
+        return false;
     }
 
-    public function getClassName(string $classFile): string
+    public function isInterface(string $classFile): bool
     {
-        return basename($classFile, '.php');
+        if (!file_exists($classFile)) {
+            return false;
+        }
+
+        $lines = file($classFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        foreach ($lines as $line) {
+            if (preg_match('/^\s*interface\s+\w+/', $line)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function isAbstract(string $classFile): bool
+    {
+        if (!file_exists($classFile)) {
+            return false;
+        }
+
+        $lines = file($classFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        foreach ($lines as $line) {
+            if (preg_match('/^\s*abstract\s+class\s+\w+/', $line)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function isFinal(string $classFile): bool
+    {
+        if (!file_exists($classFile)) {
+            return false;
+        }
+
+        $lines = file($classFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        foreach ($lines as $line) {
+            if (preg_match('/^\s*final\s+class\s+\w+/', $line)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function isClass(string $classFile): bool
+    {
+        if (!file_exists($classFile)) {
+            return false;
+        }
+
+        $lines = file($classFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        foreach ($lines as $line) {
+            if (preg_match('/^\s*class\s+\w+/', $line)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function generate()
     {
+        $nCounts = 0;
         foreach($this->getClassFiles() as $className => $classFile) {
             
+            $classPath = $this->getClassPath()."/".$classFile;
+            $appFile = $this->getAppPath()."/".$classFile;
+
+            $stubBasename = basename(str_replace('\\', '/', $className));
+            $stubNamespace = str_replace("/", "\\", preg_replace("/^Base\//", "App/", dirname(str_replace('\\', '/', $className))));
             $stubFile = $this->getStubPath()."/".$classFile;
             $stubPath = dirname($stubFile);
 
-            $stubNamespace = str_replace("/", "\\", preg_replace("/^Base\//", "App/", dirname(str_replace('\\', '/', $className))));
-            $stubClass = basename(str_replace('\\', '/', $className));
+            if(file_exists($stubFile)) unlink($stubFile);
+            if(file_exists($appFile)) continue;
+
+            if(!$this->isClass($classPath)) continue;
+            if ($this->isTrait($classPath)) continue;
+            if ($this->isInterface($classPath)) continue;
+            if ($this->isFinal($classPath)) continue;
+            if ($this->isAbstract($classPath)) continue;
 
             $stubCode = "<?php\n\nnamespace " . $stubNamespace . ";\n\n";
-            $stubCode .= "if (!class_exists('$stubClass')) {\n";
-            $stubCode .= "    class " . basename($stubClass) . " extends \\" . $className . " {}\n";
+            $stubCode .= "/**\n";
+            $stubCode .= " * This file is auto-generated by glitch/base-plugin.\n";
+            $stubCode .= " * Do not edit this file manually as changes will be overwritten at composer dump-autoload stage.\n";
+            $stubCode .= " */\n\n";
+            $stubCode .= "if (!class_exists('\\".$stubNamespace."\\".$stubBasename."')) {\n";
+            $stubCode .= "    class " . $stubBasename . " extends \\" . $className . " {}\n";
             $stubCode .= "}\n";
 
             @mkdir($stubPath, 0777, true);
             file_put_contents($stubFile, $stubCode);
+            $nCounts++;
         }
 
-        $this->print("stubs succesfully generated in ".$this->getStubPath());
+        if($nCounts > 0) {
+            $this->print($nCounts." stub(s) succesfully generated in ".$this->getStubPath());
+        }
     }
 }

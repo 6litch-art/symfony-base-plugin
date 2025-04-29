@@ -21,7 +21,7 @@
   "autoload": {
     "psr-4": {
       "Base\\Composer\\": "src",
-      "App\\": "../../../stubs"      
+      "App\\": "stubs"      
     }
   },
   "config": {
