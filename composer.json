@@ -20,8 +20,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Base\\Composer\\": "src",
-      "App\\": "stubs"      
+      "Base\\Composer\\": "src"
     }
   },
   "config": {
