@@ -9,7 +9,7 @@ use Base\Composer\CodeModifier;
 /**
  *
  */
-final class ParameterBagPackageHook  extends AbstractHook
+final class FileLinkFormatterPackageHook  extends AbstractHook
 {
     public function getPackageName(): string
     {
