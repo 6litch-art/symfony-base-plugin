@@ -98,18 +98,18 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
             }
  
 
-            dump($className, $class->getPackageName(), $packageName, $this->getPackageName());
+            echo ($className, $class->getPackageName(), $packageName, $this->getPackageName());
             if (!InstalledVersions::isInstalled($class->getPackageName())) {
                 continue;
             }
 
 
-            dump($className, $class->getPackageName(), $packageName, $this->getPackageName());
+            echo ($className, $class->getPackageName(), $packageName, $this->getPackageName());
             if ($class->getPackageName() != $packageName && $this->getPackageName() != $packageName) {
                 continue;
             }
 
-            dump($className, $class->getPackageName(), $packageName, $this->getPackageName());
+            echo ($className, $class->getPackageName(), $packageName, $this->getPackageName());
             if (!$class->checkValidityVersion($event)) {
                 continue;
             }
@@ -141,17 +141,17 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
                 continue;
             }
 
-            dump($className, $class->getPackageName(), $packageName, $this->getPackageName());
+            echo ($className, $class->getPackageName(), $packageName, $this->getPackageName());
             if (!InstalledVersions::isInstalled($class->getPackageName())) {
                 continue;
             }
 
-            dump($className, $class->getPackageName(), $packageName, $this->getPackageName());
+            echo ($className, $class->getPackageName(), $packageName, $this->getPackageName());
             if ($class->getPackageName() != $packageName && $this->getPackageName() != $packageName) {
                 continue;
             }
 
-            dump($className, $class->getPackageName(), $packageName, $this->getPackageName());
+            echo ($className, $class->getPackageName(), $packageName, $this->getPackageName());
             if (!$class->checkValidityVersion($event)) {
                 continue;
             }
@@ -198,7 +198,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
         }
     }
 
-    public function onPreAutoloadDump(ScriptEvent $event)
+    public function onPreAutoloadecho (ScriptEvent $event)
     {
         $io = $event->getIO();
         foreach (ClassMapGenerator::createMap(__DIR__) as $className => $_) {
