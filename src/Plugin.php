@@ -146,12 +146,12 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
                 continue;
             }
 
-            echo ($className." - " . $class->getPackageName(). " - " . $packageName ." -  ". $this->getPackageName();
+            echo $className." - " . $class->getPackageName(). " - " . $packageName ." -  ". $this->getPackageName();
             if ($class->getPackageName() != $packageName && $this->getPackageName() != $packageName) {
                 continue;
             }
 
-            echo ($className." - " . $class->getPackageName(). " - " . $packageName ." -  ". $this->getPackageName();
+            echo $className." - " . $class->getPackageName(). " - " . $packageName ." -  ". $this->getPackageName();
             if (!$class->checkValidityVersion($event)) {
                 continue;
             }
