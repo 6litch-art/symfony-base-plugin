@@ -104,7 +104,6 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
             if ($class->getPackageName() != $packageName && $this->getPackageName() != $packageName) {
                 continue;
             }
-
             if (!$class->checkValidityVersion($event)) {
                 continue;
             }
@@ -190,7 +189,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
         }
     }
 
-    public function onPreAutoloadecho (ScriptEvent $event)
+    public function onPreAutoloadDump(ScriptEvent $event)
     {
         $io = $event->getIO();
         foreach (ClassMapGenerator::createMap(__DIR__) as $className => $_) {
