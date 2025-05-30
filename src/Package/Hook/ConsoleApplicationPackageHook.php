@@ -9,7 +9,7 @@ use Base\Composer\CodeModifier;
 /**
  *
  */
-final class RelativePathPackageHook extends AbstractHook
+final class ConsoleApplicationPackageHook extends AbstractHook
 {
     public function getPackageName(): string
     {
