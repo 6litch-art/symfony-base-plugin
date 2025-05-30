@@ -97,19 +97,14 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
                 continue;
             }
  
-
-            echo $className . " / ". $class->getPackageName()." | ". $packageName." | ".$this->getPackageName();
             if (!InstalledVersions::isInstalled($class->getPackageName())) {
                 continue;
             }
 
-
-            echo $className . " / ". $class->getPackageName()." | ". $packageName." | ".$this->getPackageName();
             if ($class->getPackageName() != $packageName && $this->getPackageName() != $packageName) {
                 continue;
             }
 
-            echo $className . " / ". $class->getPackageName()." | ". $packageName." | ".$this->getPackageName();
             if (!$class->checkValidityVersion($event)) {
                 continue;
             }
@@ -141,17 +136,14 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
                 continue;
             }
 
-            echo $className." - " . $class->getPackageName(). " - " . $packageName ." -  ". $this->getPackageName();
             if (!InstalledVersions::isInstalled($class->getPackageName())) {
                 continue;
             }
 
-            echo $className." - " . $class->getPackageName(). " - " . $packageName ." -  ". $this->getPackageName();
             if ($class->getPackageName() != $packageName && $this->getPackageName() != $packageName) {
                 continue;
             }
 
-            echo $className." - " . $class->getPackageName(). " - " . $packageName ." -  ". $this->getPackageName();
             if (!$class->checkValidityVersion($event)) {
                 continue;
             }
