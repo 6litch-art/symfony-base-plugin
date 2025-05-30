@@ -33,7 +33,7 @@ final class RelativePathPackageHook extends AbstractHook
     public function onPackageChange(PackageEvent $event)
     {
         $this->print('Modify console script in `./bin/console`.');
-        $codeModifier = new CodeModifier($this->getProjectDir() . 'bin/console', $this->getAuthor());
+        $codeModifier = new CodeModifier($this->getProjectDir() . '/bin/console', $this->getAuthor());
         $codeModifier->replace("base-kernel", "use App\\Kernel", "use Base\\Kernel");
         $codeModifier->replace("base-application", "use Symfony\\Bundle\\FrameworkBundle\\Console\\Application", "use Base\\Console\\Application");
     }
