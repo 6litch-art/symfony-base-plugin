@@ -9,7 +9,7 @@ use Base\Composer\CodeModifier;
 /**
  *
  */
-final class FileLinkFormatterPackageHook  extends AbstractHook
+final class HtmlErrorRendererPackageHook extends AbstractHook
 {
     public function getPackageName(): string
     {
