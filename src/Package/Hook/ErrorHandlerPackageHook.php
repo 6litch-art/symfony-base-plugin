@@ -9,7 +9,7 @@ use Base\Composer\CodeModifier;
 /**
  *
  */
-final class HtmlErrorRendererPackageHook extends AbstractHook
+final class ErrorHandlerPackageHook extends AbstractHook
 {
     public function getPackageName(): string
     {
@@ -23,14 +23,14 @@ final class HtmlErrorRendererPackageHook extends AbstractHook
 
     public function onPackageChange(PackageEvent $event)
     {
-        $this->print('Utilize base FileLinkFormatter in HtmlErrorRenderer.');
-        $codeModifier = new CodeModifier($this->getBundleDir() . '/ErrorRenderer/FileLinkFormatter.php', $this->getAuthor());
-        $codeModifier->replace("base-application", "new FileLinkFormatter", "new \Base\Inspector\FileLinkFormatter");
+        $this->print('Utilize HtmlErrorRenderer in ErrorHandler.php.');
+        $codeModifier = new CodeModifier($this->getBundleDir() . '/ErrorHandler.php', $this->getAuthor());
+        $codeModifier->replace("base-application", "new HtmlErrorRenderer", "new \Base\Inspector\HtmlErrorRenderer");
     }
 
     public function onPackageRemove(PackageEvent $event)
     {
-        $codeModifier = new CodeModifier($this->getBundleDir() . '/ErrorRenderer/HtmlErrorRenderer.php', $this->getAuthor());
+        $codeModifier = new CodeModifier($this->getBundleDir() . '/ErrorHandler.php', $this->getAuthor());
         $codeModifier->restore();
     }
 }
