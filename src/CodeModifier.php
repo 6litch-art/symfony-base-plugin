@@ -263,7 +263,7 @@ class CodeModifier {
 
         // Otherwise, prepare to add the bootstrap comments and the modifications
         $date = date('Y-m-d');
-        $time = date('H:i:s');
+        $time = date('H:i:s') . ' GMT' . date('O');
 
         // Generate a unique commit identifier
         $commit = uniqid();
