@@ -2,6 +2,8 @@
 
 namespace Base\Composer;
 
+use Exception;
+
 class CodeModifier {
 
     protected $filePath;
@@ -209,7 +211,7 @@ class CodeModifier {
                     
                     $changes[$tag] ??= [];
                     if(in_array($commit, $changes[$tag])) {
-                        throw new Exception("Duplicate change '$tag@$commit' already exists.");
+                        throw new \Exception("Duplicate change '$tag@$commit' already exists.");
                     }
 
                     $changes[$tag][] = $commit;
