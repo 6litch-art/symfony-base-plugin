@@ -29,7 +29,7 @@ final class ProcessPackageHook extends AbstractHook
         $codeModifier->replace("timeout-nullify", '?float $timeout = 60', '?float $timeout = null');
 
         $this->print('Turn `private` properties into `protected` properties in `./Process.php`.');
-        $codeModifier->prepend("timeout-injection", '$this->setTimeout($timeout);', '        $timeout ?= $_ENV[\'PROCESS_TIMEOUT\'] ?? $_SERVER[\'PROCESS_TIMEOUT\'] ?? 60;');
+        $codeModifier->prepend("timeout-injection", '$this->setTimeout($timeout);', '        $timeout ??= $_ENV[\'PROCESS_TIMEOUT\'] ?? $_SERVER[\'PROCESS_TIMEOUT\'] ?? 60;');
     }
 
     public function onPackageRemove(PackageEvent $event)
