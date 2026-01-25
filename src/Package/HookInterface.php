@@ -4,9 +4,6 @@ namespace Base\Composer\Package;
 
 use Composer\Installer\PackageEvent;
 
-/**
- *
- */
 interface HookInterface
 {
     public function getPackageName(): string;

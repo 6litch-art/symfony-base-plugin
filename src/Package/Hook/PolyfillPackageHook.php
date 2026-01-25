@@ -6,9 +6,6 @@ use Base\Composer\Package\AbstractHook;
 use Composer\Installer\PackageEvent;
 use Base\Composer\CodeModifier;
 
-/**
- *
- */
 final class PolyfillPackageHook extends AbstractHook
 {
     public function getPackageName(): string
