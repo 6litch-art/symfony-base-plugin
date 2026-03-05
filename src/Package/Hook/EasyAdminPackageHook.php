@@ -45,6 +45,7 @@ final class EasyAdminPackageHook extends AbstractHook
         $this->print('Make classes `non-final` in all PHP files.');
         foreach ($phpFiles as $phpFile) {
             $codeModifier = new CodeModifier($phpFile, $this->getAuthor());
+            $codeModifier->replace("non-final", 'final readonly class ', 'readonly class ');
             $codeModifier->replace("non-final", 'final class ', 'class ');
         }
 
