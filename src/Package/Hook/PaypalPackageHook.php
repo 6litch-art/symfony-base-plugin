@@ -6,9 +6,6 @@ use Base\Composer\Package\AbstractHook;
 use Composer\Installer\PackageEvent;
 use Base\Composer\CodeModifier;
 
-/**
- *
- */
 final class PaypalPackageHook extends AbstractHook
 {
     public function getPackageName(): string
