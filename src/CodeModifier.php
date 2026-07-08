@@ -2,6 +2,7 @@
 
 namespace Base\Composer;
 
+use Base\Composer\Exception\CodeModifierException;
 use Exception;
 
 class CodeModifier {
@@ -12,6 +13,7 @@ class CodeModifier {
     protected $output;
 
     protected $recursive;
+    protected bool $strict;
     protected $tokens = null;
     protected $changes = [];
 
@@ -25,7 +27,7 @@ class CodeModifier {
     const PREG_MODIFIER_END   = '/^\s*\/\/\s*\[bootstrap:([^\]]+)@([^\]]+)\]\s*##### End of modification/s';
     const PREG_MODIFIER_META  = '/^\s*\/\/\s*\[bootstrap:([^\]]+)@([^\]]+)\] (.*)/s';
 
-    public function __construct(string $filePath, $author = "unknown", $recursive = False, $output = null) {
+    public function __construct(string $filePath, $author = "unknown", $recursive = False, $output = null, bool $strict = true) {
 
         $this->filePath = $filePath;
         $this->output = $output ?? $filePath;
@@ -33,6 +35,12 @@ class CodeModifier {
         $this->backupFilePath = $filePath . '.bak';
         $this->author = $author;
         $this->recursive = $recursive;
+
+        // strict (default): a patch that targets a specific anchor and finds
+        // nothing throws CodeModifierException instead of silently no-op'ing.
+        // Best-effort blanket passes (de-finalise every file in a bundle, where
+        // most files legitimately contain no match) pass strict: false.
+        $this->strict = $strict;
 
         $this->parse();  // Initial parsing of the file content
     }
@@ -480,7 +488,13 @@ class CodeModifier {
                 $offset = $this->offset($tokens, $nextToken);
                 $contents = $this->detokenize($tokens);
 
-                // Handle multiline search: allow flexible whitespaces between lines
+                // Handle multiline search: allow flexible whitespaces between lines.
+                // NB: matching is intentionally exact WITHIN a line here — replace()
+                // rewrites via an exact str_replace($search, …) on the matched block,
+                // so a laxer intra-line match would "find" a line str_replace can't
+                // actually change (a matched-but-unmodified silent no-op). Every
+                // base-plugin hook searches with the same spacing as its target
+                // source, so exact intra-line matching is correct and consistent.
                 $escapedSearch = preg_quote($searchItem, '/');
                 $pattern = '/[^'.PHP_EOL.']*'. str_replace(PHP_EOL, '[ \*]*' . PHP_EOL . '[ ]*', $escapedSearch) . '[^'.PHP_EOL.']*/s';
 
@@ -533,6 +547,13 @@ class CodeModifier {
             $this->backup();  // Backup the initial file before saving
             $this->write();
             $this->parse();
+        } elseif ($this->strict) {
+
+            // Not already applied (has($tag) returned early) and nothing
+            // matched: in strict mode the target has drifted — fail loudly
+            // instead of silently returning false. Best-effort passes set
+            // strict: false and just get a quiet false here.
+            throw CodeModifierException::targetNotFound($this->filePath, $tag, is_array($search) ? implode(PHP_EOL, $search) : $search);
         }
 
         return $found;
@@ -540,12 +561,16 @@ class CodeModifier {
 
     public function prependToLine($tag, string|array $search, string|array $block)
     {
-        return $this->replace($tag, $search, $block.PHP_EOL.$search);
+        // Delegate to prepend(), which operates on the ACTUALLY-MATCHED
+        // subject. The old replace($tag, $search, $block.PHP_EOL.$search)
+        // str_replaced the original search text inside the matched block, so
+        // it silently did nothing when the source's whitespace differed.
+        return $this->prepend($tag, $search, $block);
     }
 
     public function prependTo($tag, string|array $method, string|array $block)
     {
-        return $this->callbackMethod($tag, $method, 
+        return $this->callbackMethod($tag, $method,
             fn($key, $search, $subject, $block) => yield $block.PHP_EOL.$subject,
             is_array($block)  ? $block  : [$block]
         );
@@ -553,7 +578,8 @@ class CodeModifier {
 
     public function appendToLine($tag, string|array $search, string|array $block)
     {
-        return $this->replace($tag, $search, $search.PHP_EOL.$block);
+        // Delegate to append() — see prependToLine() for why str_replace no-op'd.
+        return $this->append($tag, $search, $block);
     }
 
     public function appendTo($tag, string|array $method, string|array $block)
@@ -566,6 +592,12 @@ class CodeModifier {
 
     private function callbackMethod($tag, string|array $methods, callable $fn, string|array $block)
     {
+        // Idempotent: an already-applied patch is a quiet no-op (same as
+        // callback()); without this a re-run would inject the block twice.
+        if ($this->has($tag)) {
+            return 0;
+        }
+
         $found = 0;
         $methods  = is_array($methods)  ? $methods  : [$methods];
         foreach($methods as $methodId=> $method) {
@@ -597,6 +629,10 @@ class CodeModifier {
 
                 $found++;
             }
+        }
+
+        if ($found === 0 && $this->strict) {
+            throw CodeModifierException::targetNotFound($this->filePath, $tag, is_array($methods) ? implode(", ", $methods) : $methods);
         }
 
         return $found;

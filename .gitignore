@@ -1,3 +1,2 @@
-/**.lock
-vendor
-stubs
+/.phpunit.result.cache
+/vendor/

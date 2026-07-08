@@ -40,8 +40,11 @@ final class EasyAdminPackageHook extends AbstractHook
     public function removeFinalFromAllClasses($phpFiles)
     {
         $this->print('Make classes `non-final` in all PHP files.');
+        // strict: false — this is a best-effort blanket pass over EVERY file
+        // in the bundle; most files legitimately contain no `final`, so a
+        // no-match here is normal, not a drifted-anchor failure.
         foreach ($phpFiles as $phpFile) {
-            $codeModifier = new CodeModifier($phpFile, $this->getAuthor());
+            $codeModifier = new CodeModifier($phpFile, $this->getAuthor(), strict: false);
             $codeModifier->replace("non-final", 'final readonly class ', 'readonly class ');
             $codeModifier->replace("non-final", 'final class ', 'class ');
         }
@@ -52,7 +55,7 @@ final class EasyAdminPackageHook extends AbstractHook
     {
         $this->print('Remove all `self` requirements in class method returns in all PHP files.');
         foreach ($phpFiles as $phpFile) {
-            $codeModifier = new CodeModifier($phpFile, $this->getAuthor());
+            $codeModifier = new CodeModifier($phpFile, $this->getAuthor(), strict: false);
             $codeModifier->replace("no-self", ['): self', '):self', ') :self'], ')');
         }
 
@@ -62,7 +65,7 @@ final class EasyAdminPackageHook extends AbstractHook
     {
         $this->print('Change all `self` declarations to `static` declarations in all PHP files.');
         foreach ($phpFiles as $phpFile) {
-            $codeModifier = new CodeModifier($phpFile, $this->getAuthor());           
+            $codeModifier = new CodeModifier($phpFile, $this->getAuthor(), strict: false);
             $codeModifier->replace("self-static", 'new self', 'new static');
         }
 
@@ -72,7 +75,7 @@ final class EasyAdminPackageHook extends AbstractHook
     {
         $this->print('Turn `private` properties into `protected` properties in all PHP files.');
         foreach ($phpFiles as $phpFile) {
-            $codeModifier = new CodeModifier($phpFile, $this->getAuthor());
+            $codeModifier = new CodeModifier($phpFile, $this->getAuthor(), strict: false);
             $codeModifier->replace("private-protected", 'private ', 'protected ');
         }
 

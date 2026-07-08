@@ -3,6 +3,7 @@
 namespace Base\Composer;
 
 use Base\Composer\Cloner\StubInterface;
+use Base\Composer\Exception\CodeModifierException;
 use Base\Composer\Package\AbstractHook;
 use Base\Composer\Package\HookInterface;
 
@@ -44,6 +45,22 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
     public function activate(Composer $composer, IOInterface $io)
     {
         $this->io = $io;
+    }
+
+    /**
+     * Runs a hook and, if a strict patch could not be applied (upstream
+     * source drifted), surfaces it loudly and re-throws so the composer
+     * command fails — a strict patch must never silently no-op.
+     */
+    private function runHook(callable $run): void
+    {
+        try {
+            $run();
+        } catch (CodeModifierException $e) {
+            $this->io->writeError('<error>[base-plugin] a required source patch could not be applied:</error>');
+            $this->io->writeError('<error>' . $e->getMessage() . '</error>');
+            throw $e;
+        }
     }
 
     public function deactivate(Composer $composer, IOInterface $io)
@@ -105,7 +122,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
                 continue;
             }
 
-            $class->onPackageInstall($event);
+            $this->runHook(fn() => $class->onPackageInstall($event));
         }
     }
 
@@ -144,7 +161,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
                 continue;
             }
 
-            $class->onPackageUpdate($event);
+            $this->runHook(fn() => $class->onPackageUpdate($event));
         }
     }
 
@@ -182,7 +199,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
                 continue;
             }
 
-            $class->onPackageRemove($event);
+            $this->runHook(fn() => $class->onPackageRemove($event));
         }
     }
 
