@@ -30,7 +30,10 @@ final class ConsoleApplicationPackageHook extends AbstractHook
     public function onPackageChange(PackageEvent $event)
     {
         $this->print('Modify console script in `./bin/console`.');
-        $codeModifier = new CodeModifier($this->getProjectDir() . '/bin/console', $this->getAuthor());
+        // strict: false — consuming projects may have already hand-applied this
+        // swap to bin/console outside this tool's tracking (as this one has), so
+        // a missing search anchor means "already done", not "upstream changed".
+        $codeModifier = new CodeModifier($this->getProjectDir() . '/bin/console', $this->getAuthor(), strict: false);
         $codeModifier->replace("base-application", "use Symfony\\Bundle\\FrameworkBundle\\Console\\Application", "use Base\\Console\\Application");
     }
 }
