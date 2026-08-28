@@ -88,6 +88,40 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
         return $composerJson['name'];
     }
 
+    /**
+     * True when a hook's target package has not been extracted to disk yet.
+     *
+     * When the triggering package is base-plugin ITSELF the loops below replay
+     * every hook, so that installing or updating this plugin re-applies its
+     * patches across an already populated tree. On a from-scratch install that
+     * same replay fires far too early: composer installs plugins BEFORE the
+     * packages they patch, so the targets are not on disk. InstalledVersions
+     * already lists them (the lock is written before files land), so the
+     * isInstalled() guard passes; CodeModifier then reads a file that does not
+     * exist, file_get_contents returns false, and a strict patch reports its
+     * anchor as "not found" and aborts the entire install. That is why a clean
+     * `composer install` of this project died on symfony/process while the
+     * running sites, whose vendor trees were already populated, installed fine.
+     *
+     * Skipping costs nothing: each package's own POST_PACKAGE_INSTALL fires
+     * once it really is extracted, and the hook patches it then.
+     */
+    private function isTargetNotExtracted($class, $packageName): bool
+    {
+        // Only the self-install replay is affected; a hook triggered by its own
+        // package is by definition already on disk.
+        if ($this->getPackageName() !== $packageName) return false;
+        if ($class->getPackageName() === $packageName) return false;
+
+        try {
+            $path = InstalledVersions::getInstallPath($class->getPackageName());
+        } catch (\Throwable $e) {
+            return true;
+        }
+
+        return $path === null || !is_dir($path);
+    }
+
     private array $installedPackageNames = [];
     public function onPackageInstall(PackageEvent $event)
     {
@@ -116,6 +150,9 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
             }
 
             if ($class->getPackageName() != $packageName && $this->getPackageName() != $packageName) {
+                continue;
+            }
+            if ($this->isTargetNotExtracted($class, $packageName)) {
                 continue;
             }
             if (!$class->checkValidityVersion($event)) {
@@ -154,6 +191,10 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
             }
 
             if ($class->getPackageName() != $packageName && $this->getPackageName() != $packageName) {
+                continue;
+            }
+
+            if ($this->isTargetNotExtracted($class, $packageName)) {
                 continue;
             }
 
