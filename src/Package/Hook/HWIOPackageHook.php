@@ -20,7 +20,11 @@ final class HWIOPackageHook extends AbstractHook
     
     public function onPackageChange(PackageEvent $event)
     {
-        $codeModifier = new CodeModifier($this->getBundleDir() . '/src/DependencyInjection/HWIOAuthExtension.php', $this->getAuthor());
+        // strict: false — hwi/oauth-bundle 2.x already extends the DI-component Extension
+        // upstream, so the class this patch used to rewrite is gone. It has been a no-op on
+        // beta and production for months; a missing anchor here means "upstream fixed it",
+        // not "abort the install".
+        $codeModifier = new CodeModifier($this->getBundleDir() . '/src/DependencyInjection/HWIOAuthExtension.php', $this->getAuthor(), strict: false);
 
         $this->print('Fix DI Extension in `./HWIOAuthExtension.php`.');
         $codeModifier->replace("di-extension", 'Symfony\Component\HttpKernel\DependencyInjection\Extension', 'Symfony\Component\DependencyInjection\Extension\Extension');
