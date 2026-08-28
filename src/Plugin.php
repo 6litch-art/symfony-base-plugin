@@ -42,9 +42,14 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
     }
 
     protected IOInterface $io;
+    protected ?Composer $composer = null;
     public function activate(Composer $composer, IOInterface $io)
     {
         $this->io = $io;
+        // Kept so hooks can be resolved against the PROJECT's vendor-dir. See
+        // isTargetNotExtracted(): Composer\InstalledVersions answers for
+        // composer's OWN dependency set, not the project being installed.
+        $this->composer = $composer;
     }
 
     /**
@@ -113,13 +118,25 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
         if ($this->getPackageName() !== $packageName) return false;
         if ($class->getPackageName() === $packageName) return false;
 
-        try {
-            $path = InstalledVersions::getInstallPath($class->getPackageName());
-        } catch (\Throwable $e) {
-            return true;
-        }
+        // Resolve against the PROJECT's vendor-dir, never Composer\InstalledVersions.
+        // Inside a plugin that class answers for COMPOSER'S OWN dependency set,
+        // and composer itself depends on symfony/process, symfony/console and
+        // friends - so getInstallPath('symfony/process') happily returns a real,
+        // existing directory inside composer's own tree while the project's copy
+        // has not been extracted at all. That false positive is exactly why the
+        // pre-existing isInstalled() guard above never prevented anything.
+        $vendorDir = $this->composer?->getConfig()?->get('vendor-dir');
+        if (!$vendorDir) return false;
 
-        return $path === null || !is_dir($path);
+        $path = rtrim($vendorDir, '/') . '/' . $class->getPackageName();
+
+        // Require a real, non-empty directory: composer creates the target
+        // directory before it finishes extracting into it, so is_dir() alone
+        // would go true a moment too early.
+        if (!is_dir($path)) return true;
+
+        $entries = @scandir($path);
+        return $entries === false || count($entries) <= 2;
     }
 
     private array $installedPackageNames = [];
